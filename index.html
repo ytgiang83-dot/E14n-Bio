@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>E14n - Trung Tâm Điều Hành Ôn Tập</title>
+    <style>
+        :root {
+            --primary-glow: #00d2ff;
+            --secondary-glow: #3a7bd5;
+            --card-bg: rgba(0, 0, 0, 0.4);
+            --border-color: rgba(255, 255, 255, 0.15);
+            --text-main: #ffffff;
+            --accent-color: #00f2fe;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-image: url('background.gif');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-color: #05070a;
+            
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow: hidden; 
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            perspective: 1000px;
+            cursor: none; /* Ẩn cursor mặc định trên PC */
+        }
+
+        /* CUSTOM CURSOR CHO PC */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--accent-color);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-follower {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.25s ease;
+            box-shadow: 0 0 15px var(--accent-color);
+        }
+
+        .cursor.expand {
+            transform: scale(1.8);
+            background: rgba(0, 242, 254, 0.1);
+        }
+
+        /* PARTICLE CANVAS */
+        #particle-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* MOUSE GLOW EFFECT */
+        .mouse-glow {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .mouse-glow.active {
+            opacity: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 450px;
+            padding: 40px 30px;
+            background: var(--card-bg);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            animation: fadeIn 1s ease-out;
+            transition: transform 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+            transform-style: preserve-3d;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .profile-section {
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        .profile-section img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-color);
+            margin-bottom: 15px;
+            box-shadow: 0 0 25px var(--accent-color);
+            object-fit: cover;
+            transition: all 0.3s ease;
+            transform: translateZ(50px);
+        }
+
+        .profile-section img:hover {
+            transform: translateZ(80px) scale(1.1) rotate(5deg);
+            box-shadow: 0 0 40px var(--accent-color), 0 0 80px rgba(0, 242, 254, 0.3);
+        }
+
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            background: linear-gradient(to right, #fff, #bbb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transform: translateZ(30px);
+            transition: all 0.3s ease;
+        }
+
+        h1:hover {
+            letter-spacing: 3px;
+            transform: translateZ(50px);
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transform: translateZ(20px);
+        }
+
+        #subject-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            height: 310px; 
+            overflow-y: auto;
+            padding-right: 10px;
+            scroll-behavior: smooth;
+        }
+
+        .btn {
+            flex-shrink: 0;
+            min-height: 65px;
+            position: relative;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid var(--border-color);
+            color: white;
+            border-radius: 15px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transform-style: preserve-3d;
+        }
+
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 25px rgba(0, 242, 254, 0.3), 
+                        0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* MAGNETIC EFFECT */
+        .btn.magnetic {
+            transform: translate(var(--tx, 0), var(--ty, 0)) translateZ(30px) scale(1.05);
+        }
+
+        .btn::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: -100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::after {
+            left: 100%;
+        }
+
+        /* NEON GLOW EFFECT ON HOVER */
+        .btn::before {
+            content: "";
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow), var(--accent-color));
+            border-radius: 15px;
+            opacity: 0;
+            filter: blur(10px);
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            opacity: 0.7;
+            animation: rotate-glow 3s linear infinite;
+        }
+
+        @keyframes rotate-glow {
+            0% { filter: blur(10px) hue-rotate(0deg); }
+            100% { filter: blur(10px) hue-rotate(360deg); }
+        }
+
+        .btn:active {
+            transform: scale(0.96);
+        }
+
+        /* RIPPLE EFFECT */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(0);
+            animation: ripple-animation 0.6s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* TOUCH GLOW EFFECT (Mobile) */
+        .touch-glow {
+            position: fixed;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, rgba(0, 242, 254, 0.4) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%) scale(0);
+            animation: touch-glow-animation 0.5s ease-out;
+        }
+
+        @keyframes touch-glow-animation {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(2);
+                opacity: 0;
+            }
+        }
+
+        #subject-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        #subject-list::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        #subject-list::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 10px;
+            box-shadow: 0 0 10px var(--accent-color);
+        }
+
+        .copyright {
+            margin-top: 30px;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transform: translateZ(10px);
+        }
+
+        /* FLOATING ANIMATION */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .profile-section img {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Mobile: Hiển thị cursor mặc định */
+        @media (max-width: 768px) {
+            body {
+                cursor: auto;
+            }
+            .cursor, .cursor-follower {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- PARTICLE CANVAS -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- MOUSE GLOW -->
+    <div class="mouse-glow" id="mouseGlow"></div>
+
+    <!-- CUSTOM CURSOR (PC only) -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursorFollower"></div>
+
+    <div class="container" id="main-card">
+        <div class="profile-section">
+            <img src="my-avatar.gif" alt="Avatar">
+            <h1>E14n Bio</h1>
+            <div class="subtitle">Hệ Thống Ôn Tập Trực Tuyến</div>
+        </div>
+
+        <div id="subject-list"></div>
+
+        <div class="copyright">
+            BẢN QUYỀN THUỘC VỀ E14n
+        </div>
+    </div>
+
+    <script>
+        const SUBJECT_DATA = [
+            { name: "📜 ÔN TẬP LỊCH SỬ", link: "https://glittering-yeot-cf0525.netlify.app" },
+            { name: "🇬🇧 ÔN TẬP TIẾNG ANH", link: "https://leafy-fairy-5bc7fc.netlify.app/" }
+        ];
+
+        const listContainer = document.getElementById('subject-list');
+        const card = document.getElementById('main-card');
+        const cursor = document.getElementById('cursor');
+        const cursorFollower = document.getElementById('cursorFollower');
+        const mouseGlow = document.getElementById('mouseGlow');
+
+        let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        // =============================================
+        // 1. TẠO CÁC NÚT BẤM
+        // =============================================
+        SUBJECT_DATA.forEach(sub => {
+            const a = document.createElement('a');
+            a.href = sub.link;
+            a.className = 'btn';
+            a.innerText = sub.name;
+            a.target = "_blank";
+            a.rel = "noopener noreferrer";
+            listContainer.appendChild(a);
+        });
+
+        // =============================================
+        // 2. HIỆU ỨNG CHO PC
+        // =============================================
+        if (!isMobile) {
+            let mouseX = 0, mouseY = 0;
+            let cursorX = 0, cursorY = 0;
+            let followerX = 0, followerY = 0;
+
+            // Custom Cursor
+            window.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                
+                // Mouse glow effect
+                mouseGlow.style.left = mouseX + 'px';
+                mouseGlow.style.top = mouseY + 'px';
+                mouseGlow.classList.add('active');
+
+                // Card tilt effect
+                const xAxis = (window.innerWidth / 2 - mouseX) / 20;
+                const yAxis = (window.innerHeight / 2 - mouseY) / 20;
+                card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+
+            // Smooth cursor animation
+            function animateCursor() {
+                const speed = 0.15;
+                cursorX += (mouseX - cursorX) * speed;
+                cursorY += (mouseY - cursorY) * speed;
+                followerX += (mouseX - followerX) * speed * 0.5;
+                followerY += (mouseY - followerY) * speed * 0.5;
+
+                cursor.style.transform = `translate(${cursorX - 10}px, ${cursorY - 10}px)`;
+                cursorFollower.style.transform = `translate(${followerX - 4}px, ${followerY - 4}px)`;
+
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            // Cursor expand on hover
+            document.querySelectorAll('.btn, .profile-section img, h1').forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('expand'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
+            });
+
+            window.addEventListener('mouseleave', () => {
+                card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+                mouseGlow.classList.remove('active');
+            });
+
+            // =============================================
+            // MAGNETIC BUTTONS EFFECT
+            // =============================================
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(btn => {
+                btn.addEventListener('mousemove', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const x = e.clientX - rect.left - rect.width / 2;
+                    const y = e.clientY - rect.top - rect.height / 2;
+                    
+                    const distance = Math.sqrt(x * x + y * y);
+                    const maxDistance = 100;
+                    
+                    if (distance < maxDistance) {
+                        const strength = (maxDistance - distance) / maxDistance;
+                        const moveX = x * strength * 0.3;
+                        const moveY = y * strength * 0.3;
+                        
+                        btn.style.setProperty('--tx', `${moveX}px`);
+                        btn.style.setProperty('--ty', `${moveY}px`);
+                        btn.classList.add('magnetic');
+                    }
+                });
+
+                btn.addEventListener('mouseleave', () => {
+                    btn.style.setProperty('--tx', '0');
+                    btn.style.setProperty('--ty', '0');
+                    btn.classList.remove('magnetic');
+                });
+            });
+
+            // =============================================
+            // PARTICLE SYSTEM
+            // =============================================
+            const canvas = document.getElementById('particle-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const particleCount = 50;
+
+            class Particle {
+                constructor() {
+                    this.reset();
+                    this.y = Math.random() * canvas.height;
+                }
+
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = 0;
+                    this.size = Math.random() * 2 + 0.5;
+                    this.speedY = Math.random() * 1 + 0.5;
+                    this.speedX = Math.random() * 0.5 - 0.25;
+                    this.opacity = Math.random() * 0.5 + 0.2;
+                }
+
+                update() {
+                    this.y += this.speedY;
+                    this.x += this.speedX;
+
+                    // Particle follows mouse slightly
+                    const dx = mouseX - this.x;
+                    const dy = mouseY - this.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 150) {
+                        const force = (150 - distance) / 150;
+                        this.x += dx * force * 0.01;
+                        this.y += dy * force * 0.01;
+                    }
+
+                    if (this.y > canvas.height || this.x < 0 || this.x > canvas.width) {
+                        this.reset();
+                    }
+                }
+
+                draw() {
+                    ctx.fillStyle = `rgba(0, 242, 254, ${this.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Glow effect
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#00f2fe';
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+
+            // =============================================
+            // RIPPLE EFFECT ON CLICK
+            // =============================================
+            document.addEventListener('click', (e) => {
+                const ripple = document.createElement('div');
+                ripple.className = 'ripple';
+                ripple.style.left = e.clientX + 'px';
+                ripple.style.top = e.clientY + 'px';
+                ripple.style.width = '10px';
+                ripple.style.height = '10px';
+                document.body.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+            });
+        }
+
+        // =============================================
+        // 3. HIỆU ỨNG CHO MOBILE
+        // =============================================
+        if (isMobile) {
+            // Touch Glow Effect
+            document.addEventListener('touchstart', (e) => {
+                const touch = e.touches[0];
+                const glow = document.createElement('div');
+                glow.className = 'touch-glow';
+                glow.style.left = touch.clientX + 'px';
+                glow.style.top = touch.clientY + 'px';
+                document.body.appendChild(glow);
+
+                setTimeout(() => glow.remove(), 500);
+            });
+
+            // Ripple effect on touch
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('touchstart', (e) => {
+                    const rect = btn.getBoundingClientRect();
+                    const x = e.touches[0].clientX - rect.left;
+                    const y = e.touches[0].clientY - rect.top;
+
+                    const ripple = document.createElement('div');
+                    ripple.className = 'ripple';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.style.width = '10px';
+                    ripple.style.height = '10px';
+                    ripple.style.position = 'absolute';
+                    btn.appendChild(ripple);
+
+                    setTimeout(() => ripple.remove(), 600);
+                });
+            });
+
+            // Haptic Feedback (Vibration)
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('touchstart', () => {
+                    if (navigator.vibrate) {
+                        navigator.vibrate(10); // Rung nhẹ 10ms
+                    }
+                });
+            });
+
+            // Long Press Effect (hiển thị info) - ĐÃ FIX: Bỏ preventDefault để không chặn click
+            let longPressTimer;
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('touchstart', (e) => {
+                    // Đã xóa e.preventDefault() ở đây để link hoạt động bình thường trên mobile
+                    longPressTimer = setTimeout(() => {
+                        // Scale effect
+                        btn.style.transform = 'scale(1.1)';
+                        if (navigator.vibrate) {
+                            navigator.vibrate([20, 10, 20]); // Pattern vibration
+                        }
+                    }, 500);
+                });
+
+                btn.addEventListener('touchend', () => {
+                    clearTimeout(longPressTimer);
+                    btn.style.transform = 'scale(1)';
+                });
+
+                btn.addEventListener('touchmove', () => {
+                    clearTimeout(longPressTimer);
+                });
+            });
+
+            // Gyroscope Effect
+            function handleOrientation(event) {
+                let x = event.gamma;
+                let y = event.beta;
+                
+                const limit = 20;
+                if (x > limit) x = limit;
+                if (x < -limit) x = -limit;
+                if (y > (45 + limit)) y = 45 + limit;
+                if (y < (45 - limit)) y = 45 - limit;
+
+                card.style.transform = `rotateY(${x / 1.2}deg) rotateX(${-(y - 45) / 1.2}deg)`;
+            }
+
+            function requestGyroPermission() {
+                if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    DeviceOrientationEvent.requestPermission()
+                        .then(response => {
+                            if (response == 'granted') {
+                                window.addEventListener('deviceorientation', handleOrientation);
+                            }
+                        })
+                        .catch(console.error);
+                } else {
+                    window.addEventListener('deviceorientation', handleOrientation);
+                }
+            }
+
+            document.body.addEventListener('click', () => {
+                requestGyroPermission();
+            }, { once: true });
+        }
+
+    </script>
+</body>
+</html>
