@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>E14n - Trung Tâm Điều Hành Ôn Tập</title>
+    <title>E14n – Trạm Điều Hành</title>
     <style>
         :root {
             --primary-glow: #a855f7;
             --secondary-glow: #3b82f6;
-            --card-bg: rgba(10, 10, 30, 0.4);
-            --border-color: rgba(255, 255, 255, 0.15);
+            --card-bg: rgba(10, 10, 30, 0.35);
+            --border-color: rgba(255, 255, 255, 0.12);
             --text-main: #ffffff;
             --accent-color: #c084fc;
         }
@@ -36,7 +36,7 @@
             cursor: none;
         }
 
-        /* NEBULA BACKGROUND */
+        /* NEBULA */
         .nebula {
             position: fixed;
             border-radius: 50%;
@@ -76,16 +76,7 @@
             100% { transform: translate(40px, -30px) scale(1.2); }
         }
 
-        .nebula-wrapper {
-            position: fixed;
-            pointer-events: none;
-            z-index: -2;
-        }
-        /* Wrappers sẽ được JS gán translate để parallax, không dùng animation của nebula nữa khi parallax active? 
-           Ta vẫn giữ animation drift nhưng để parallax hoạt động ta sẽ ghi đè transform của nebula nên drift sẽ tạm dừng. 
-           Chấp nhận. */
-        
-        /* SPACE CANVAS (WARP SPEED) */
+        /* SPACE CANVAS (WARP SPEED)*/
         #space-canvas {
             position: fixed;
             top: 0;
@@ -96,7 +87,7 @@
             z-index: -1;
         }
 
-        /* AURA CANVAS (CURSOR SPARKLES) - chỉ PC */
+        /* AURA CANVAS (PC only) */
         #aura-canvas {
             position: fixed;
             top: 0;
@@ -105,10 +96,10 @@
             height: 100%;
             pointer-events: none;
             z-index: 9995;
-            display: none; /* ẩn mặc định, JS bật nếu PC */
+            display: none;
         }
 
-        /* BURST CANVAS (TOUCH BURST) - chỉ Mobile */
+        /* BURST CANVAS (Mobile only) */
         #burst-canvas {
             position: fixed;
             top: 0;
@@ -149,7 +140,7 @@
             100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
         }
 
-        /* CUSTOM CURSOR CHO PC */
+        /* CUSTOM CURSOR */
         .cursor {
             position: fixed;
             width: 20px;
@@ -179,7 +170,7 @@
             background: rgba(192, 132, 252, 0.1);
         }
 
-        /* MOUSE GLOW EFFECT */
+        /* MOUSE GLOW */
         .mouse-glow {
             position: fixed;
             width: 400px;
@@ -197,6 +188,7 @@
             opacity: 1;
         }
 
+        /* MAIN CARD */
         .container {
             position: relative;
             z-index: 10;
@@ -223,6 +215,7 @@
         .profile-section {
             position: relative;
             transform-style: preserve-3d;
+            margin-bottom: 20px;
         }
 
         .profile-section img {
@@ -243,7 +236,7 @@
         }
 
         h1 {
-            font-size: 26px;
+            font-size: 28px;
             font-weight: 800;
             letter-spacing: 1px;
             margin-bottom: 5px;
@@ -262,30 +255,31 @@
         .subtitle {
             font-size: 13px;
             color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 25px;
+            margin-bottom: 30px;
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             transform: translateZ(20px);
         }
 
         #subject-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 14px;
             height: 310px;
             overflow-y: auto;
-            padding-right: 10px;
+            padding-right: 8px;
             scroll-behavior: smooth;
         }
 
+        /* TECHNICAL BUTTON */
         .btn {
             flex-shrink: 0;
-            min-height: 65px;
+            min-height: 70px;
             position: relative;
-            background: rgba(30, 30, 60, 0.6);
-            border: 1px solid var(--border-color);
+            background: rgba(20, 20, 50, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             color: white;
-            border-radius: 15px;
+            border-radius: 16px;
             text-decoration: none;
             font-size: 16px;
             font-weight: 600;
@@ -296,63 +290,100 @@
             justify-content: center;
             cursor: pointer;
             transform-style: preserve-3d;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
 
         .btn:hover {
-            background: rgba(60, 40, 100, 0.5);
             border-color: var(--accent-color);
-            box-shadow: 0 0 25px rgba(168, 85, 247, 0.3), 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: inset 0 0 30px rgba(168,85,247,0.2), 0 0 30px rgba(168,85,247,0.25);
         }
 
-        .btn.magnetic {
-            transform: translate(var(--tx, 0), var(--ty, 0)) translateZ(30px) scale(1.05);
-        }
-
-        .btn::after {
-            content: "";
+        /* CORNER BRACKETS */
+        .bracket-tl,
+        .bracket-br {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: -100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
+            width: 14px;
+            height: 14px;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        .bracket-tl {
+            top: 7px;
+            left: 7px;
+            border-left: 1.5px solid var(--accent-color);
+            border-top: 1.5px solid var(--accent-color);
+        }
+        .bracket-br {
+            bottom: 7px;
+            right: 7px;
+            border-right: 1.5px solid var(--accent-color);
+            border-bottom: 1.5px solid var(--accent-color);
         }
 
-        .btn:hover::after {
-            left: 100%;
-        }
-
-        .btn::before {
-            content: "";
+        /* LED */
+        .led {
             position: absolute;
-            inset: -2px;
-            background: linear-gradient(45deg, var(--primary-glow), var(--secondary-glow), var(--accent-color));
-            border-radius: 15px;
+            top: 10px;
+            right: 10px;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            box-shadow: 0 0 8px var(--accent-color), 0 0 12px var(--primary-glow);
+            opacity: 0.85;
+            pointer-events: none;
+        }
+
+        /* SERIAL */
+        .serial {
+            position: absolute;
+            bottom: 8px;
+            left: 16px;
+            font-family: 'Courier New', monospace;
+            font-size: 9px;
+            color: var(--accent-color);
+            opacity: 0.6;
+            letter-spacing: 1px;
+            pointer-events: none;
+        }
+
+        /* SHEEN */
+        .sheen {
+            position: absolute;
+            top: -120%;
+            left: -120%;
+            width: 250%;
+            height: 250%;
+            background: linear-gradient(130deg, transparent 40%, rgba(255,255,255,0.06) 50%, transparent 60%);
+            transform: rotate(45deg);
+            transition: all 0.45s ease;
+            pointer-events: none;
             opacity: 0;
-            filter: blur(10px);
-            transition: opacity 0.3s ease;
-            z-index: -1;
+        }
+        .btn:hover .sheen {
+            opacity: 1;
+            top: 0;
+            left: 0;
         }
 
-        .btn:hover::before {
-            opacity: 0.7;
-            animation: rotate-glow 3s linear infinite;
+        /* TEXT INSIDE */
+        .btn-text {
+            position: relative;
+            z-index: 1;
+            letter-spacing: 1px;
         }
 
-        @keyframes rotate-glow {
-            0% { filter: blur(10px) hue-rotate(0deg); }
-            100% { filter: blur(10px) hue-rotate(360deg); }
+        /* MAGNETIC */
+        .btn.magnetic {
+            transform: translate(var(--tx, 0), var(--ty, 0)) translateZ(30px) scale(1.03);
         }
 
-        .btn:active {
-            transform: scale(0.96);
-        }
-
+        /* RIPPLE */
         .ripple {
             position: absolute;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.4);
             transform: scale(0);
             animation: ripple-animation 0.6s ease-out;
             pointer-events: none;
@@ -366,14 +397,12 @@
         }
 
         #subject-list::-webkit-scrollbar {
-            width: 5px;
+            width: 4px;
         }
-
         #subject-list::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 10px;
         }
-
         #subject-list::-webkit-scrollbar-thumb {
             background: var(--accent-color);
             border-radius: 10px;
@@ -382,56 +411,47 @@
 
         .copyright {
             margin-top: 30px;
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.4);
-            font-weight: 600;
-            letter-spacing: 1.5px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.3);
+            font-weight: 500;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            transform: translateZ(10px);
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-10px); }
         }
-
         .profile-section img {
             animation: float 3s ease-in-out infinite;
         }
 
         @media (max-width: 768px) {
-            body {
-                cursor: auto;
-            }
-            .cursor, .cursor-follower {
-                display: none;
-            }
-            #aura-canvas {
-                display: none !important; /* đảm bảo ẩn */
-            }
-            /* Cho phép burst canvas hiển thị thông qua JS */
+            body { cursor: auto; }
+            .cursor, .cursor-follower { display: none; }
+            #aura-canvas { display: none !important; }
         }
     </style>
 </head>
 <body>
-    <!-- NEBULA BACKGROUND (có id để JS parallax) -->
+    <!-- NEBULA -->
     <div class="nebula nebula-1" id="nebula1"></div>
     <div class="nebula nebula-2" id="nebula2"></div>
     <div class="nebula nebula-3" id="nebula3"></div>
 
-    <!-- SPACE CANVAS (WARP SPEED STARS) -->
+    <!-- SPACE CANVAS -->
     <canvas id="space-canvas"></canvas>
 
-    <!-- BURST CANVAS (Mobile touch burst) -->
+    <!-- BURST CANVAS (Mobile) -->
     <canvas id="burst-canvas"></canvas>
 
-    <!-- AURA CANVAS (PC cursor sparkles) -->
+    <!-- AURA CANVAS (PC) -->
     <canvas id="aura-canvas"></canvas>
 
     <!-- MOUSE GLOW -->
     <div class="mouse-glow" id="mouseGlow"></div>
 
-    <!-- CUSTOM CURSOR (PC only) -->
+    <!-- CUSTOM CURSOR -->
     <div class="cursor" id="cursor"></div>
     <div class="cursor-follower" id="cursorFollower"></div>
 
@@ -439,14 +459,12 @@
         <div class="profile-section">
             <img src="my-avatar.gif" alt="Avatar">
             <h1>E14n Bio</h1>
-            <div class="subtitle" id="subtitle">Hệ Thống Ôn Tập Trực Tuyến</div>
+            <div class="subtitle" id="subtitle">Hệ Thống Ôn Tập</div>
         </div>
 
         <div id="subject-list"></div>
 
-        <div class="copyright">
-            BẢN QUYỀN THUỘC VỀ E14n
-        </div>
+        <div class="copyright">BẢN QUYỀN THUỘC VỀ E14n</div>
     </div>
 
     <script>
@@ -460,37 +478,41 @@
         const cursor = document.getElementById('cursor');
         const cursorFollower = document.getElementById('cursorFollower');
         const mouseGlow = document.getElementById('mouseGlow');
-        const subtitleElement = document.getElementById('subtitle');
 
-        let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-        // =============================================
-        // 1. TẠO CÁC NÚT BẤM
-        // =============================================
-        SUBJECT_DATA.forEach(sub => {
+        // ========== TẠO NÚT KỸ THUẬT ==========
+        SUBJECT_DATA.forEach((sub, i) => {
             const a = document.createElement('a');
             a.href = sub.link;
             a.className = 'btn';
-            a.innerText = sub.name;
-            a.target = "_blank";
-            a.rel = "noopener noreferrer";
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            a.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+            a.innerHTML = `
+                <span class="bracket-tl"></span>
+                <span class="bracket-br"></span>
+                <span class="led"></span>
+                <span class="serial">[ SEC-${String(i+1).padStart(2, '0')} ]</span>
+                <span class="btn-text">${sub.name}</span>
+                <span class="sheen"></span>
+            `;
             listContainer.appendChild(a);
         });
 
-        // =============================================
-        // 2. SPACE WARP SPEED BACKGROUND (Canvas)
-        // =============================================
+        // ========== SPACE BACKGROUND ==========
         const spaceCanvas = document.getElementById('space-canvas');
         const spaceCtx = spaceCanvas.getContext('2d');
-        let spaceW, spaceH, centerX, centerY;
+        let spaceW, spaceH, baseCenterX, baseCenterY;
         const stars = [];
-        const STAR_COUNT = 250;
+        const STAR_COUNT = 180;
+        let centerOffX = 0, centerOffY = 0; // distortion offset
 
         function resizeSpaceCanvas() {
             spaceW = spaceCanvas.width = window.innerWidth;
             spaceH = spaceCanvas.height = window.innerHeight;
-            centerX = spaceW / 2;
-            centerY = spaceH / 2;
+            baseCenterX = spaceW / 2;
+            baseCenterY = spaceH / 2;
         }
         window.addEventListener('resize', resizeSpaceCanvas);
         resizeSpaceCanvas();
@@ -501,53 +523,53 @@
             }
             reset(initial = false) {
                 const angle = Math.random() * Math.PI * 2;
-                const maxDist = Math.max(spaceW, spaceH) * 0.7;
-                this.dist = initial ? Math.random() * maxDist : 10 + Math.random() * 40;
+                const maxDist = Math.max(spaceW, spaceH) * 0.8;
+                this.dist = initial ? Math.random() * maxDist : 10 + Math.random() * 30;
                 this.angle = angle;
                 this.z = Math.random() * 0.9 + 0.1;
-                this.speed = (0.3 + this.z * 2.5);
-                this.size = (0.3 + this.z * 2.2);
-                this.opacity = 0.3 + this.z * 0.7;
+                this.speed = (0.2 + this.z * 1.6); // chậm rãi
+                this.size = (0.3 + this.z * 2.0);
+                this.opacity = 0.25 + this.z * 0.7;
                 const colors = ['#ffffff', '#e9d5ff', '#c4b5fd', '#a5f0fc', '#c084fc'];
                 this.color = colors[Math.floor(Math.random() * colors.length)];
             }
             update() {
                 this.dist += this.speed;
-                const maxDist = Math.max(spaceW, spaceH) * 0.9;
+                const maxDist = Math.max(spaceW, spaceH) * 0.95;
                 if (this.dist > maxDist) {
-                    this.dist = 5 + Math.random() * 30;
+                    this.dist = 5 + Math.random() * 25;
                     this.angle = Math.random() * Math.PI * 2;
                 }
             }
             draw(ctx) {
-                const x = centerX + Math.cos(this.angle) * this.dist;
-                const y = centerY + Math.sin(this.angle) * this.dist;
+                const cx = baseCenterX + centerOffX;
+                const cy = baseCenterY + centerOffY;
+                const x = cx + Math.cos(this.angle) * this.dist;
+                const y = cy + Math.sin(this.angle) * this.dist;
                 if (x < -10 || x > spaceW + 10 || y < -10 || y > spaceH + 10) return;
                 ctx.save();
                 ctx.globalAlpha = this.opacity;
                 ctx.fillStyle = this.color;
-                ctx.shadowBlur = this.size * 4;
+                ctx.shadowBlur = this.size * 3;
                 ctx.shadowColor = this.color;
                 ctx.beginPath();
                 ctx.arc(x, y, this.size, 0, Math.PI * 2);
                 ctx.fill();
-                const tailLength = this.speed * 3;
-                const tailX = x - Math.cos(this.angle) * tailLength;
-                const tailY = y - Math.sin(this.angle) * tailLength;
-                ctx.globalAlpha = this.opacity * 0.4;
+                const tailLen = this.speed * 2.5;
+                const tx = x - Math.cos(this.angle) * tailLen;
+                const ty = y - Math.sin(this.angle) * tailLen;
+                ctx.globalAlpha = this.opacity * 0.35;
                 ctx.strokeStyle = this.color;
-                ctx.lineWidth = this.size * 0.6;
+                ctx.lineWidth = this.size * 0.5;
                 ctx.beginPath();
                 ctx.moveTo(x, y);
-                ctx.lineTo(tailX, tailY);
+                ctx.lineTo(tx, ty);
                 ctx.stroke();
                 ctx.restore();
             }
         }
 
-        for (let i = 0; i < STAR_COUNT; i++) {
-            stars.push(new WarpStar());
-        }
+        for (let i = 0; i < STAR_COUNT; i++) stars.push(new WarpStar());
 
         function animateSpace() {
             spaceCtx.clearRect(0, 0, spaceW, spaceH);
@@ -559,35 +581,24 @@
         }
         animateSpace();
 
-        // =============================================
-        // 3. LOCAL STORAGE - WELCOME MESSAGE
-        // =============================================
+        // ========== LOCAL STORAGE ==========
         const STORAGE_KEY = 'e14n_visited';
         const hasVisited = localStorage.getItem(STORAGE_KEY);
-
-        function showWelcomeMessage(message) {
-            const msgDiv = document.createElement('div');
-            msgDiv.id = 'welcome-msg';
-            msgDiv.textContent = message;
-            document.body.appendChild(msgDiv);
-            // Tự xóa sau khi animation kết thúc (3s)
-            setTimeout(() => {
-                if (msgDiv.parentNode) msgDiv.parentNode.removeChild(msgDiv);
-            }, 3000);
+        function showWelcomeMessage(msg) {
+            const div = document.createElement('div');
+            div.id = 'welcome-msg';
+            div.textContent = msg;
+            document.body.appendChild(div);
+            setTimeout(() => { if (div.parentNode) div.remove(); }, 3000);
         }
-
         if (!hasVisited) {
-            // Lần đầu tiên
             localStorage.setItem(STORAGE_KEY, '1');
             showWelcomeMessage('🌟 Chào mừng bạn đến với E14n!');
         } else {
-            // Đã từng ghé thăm
             showWelcomeMessage('🚀 Welcome back, Commander!');
         }
 
-        // =============================================
-        // 4. TOUCH BURST (Mobile)
-        // =============================================
+        // ========== TOUCH BURST (Mobile) ==========
         const burstCanvas = document.getElementById('burst-canvas');
         const burstCtx = burstCanvas.getContext('2d');
         let burstW, burstH;
@@ -603,8 +614,7 @@
 
         class BurstParticle {
             constructor(x, y) {
-                this.x = x;
-                this.y = y;
+                this.x = x; this.y = y;
                 const angle = Math.random() * Math.PI * 2;
                 const speed = 2 + Math.random() * 5;
                 this.vx = Math.cos(angle) * speed;
@@ -615,8 +625,7 @@
                 this.color = Math.random() < 0.5 ? '#c084fc' : '#e9d5ff';
             }
             update() {
-                this.x += this.vx;
-                this.y += this.vy;
+                this.x += this.vx; this.y += this.vy;
                 this.life -= this.decay;
             }
             draw(ctx) {
@@ -627,15 +636,15 @@
                 ctx.shadowBlur = this.size * 4;
                 ctx.shadowColor = this.color;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
                 ctx.fill();
                 ctx.restore();
             }
         }
 
         function createBurst(x, y) {
-            const count = 25; // số hạt mỗi lần chạm
-            for (let i = 0; i < count; i++) {
+            const count = 20;
+            for (let i=0; i<count; i++) {
                 if (burstParticles.length < BURST_MAX) {
                     burstParticles.push(new BurstParticle(x, y));
                 }
@@ -644,12 +653,10 @@
 
         function animateBurst() {
             burstCtx.clearRect(0, 0, burstW, burstH);
-            for (let i = burstParticles.length - 1; i >= 0; i--) {
+            for (let i=burstParticles.length-1; i>=0; i--) {
                 burstParticles[i].update();
                 burstParticles[i].draw(burstCtx);
-                if (burstParticles[i].life <= 0) {
-                    burstParticles.splice(i, 1);
-                }
+                if (burstParticles[i].life <= 0) burstParticles.splice(i,1);
             }
             requestAnimationFrame(animateBurst);
         }
@@ -658,76 +665,46 @@
             burstCanvas.style.display = 'block';
             resizeBurstCanvas();
             animateBurst();
-
-            // Touch event cho burst (toàn màn hình)
             document.addEventListener('touchstart', (e) => {
                 const touch = e.touches[0];
                 createBurst(touch.clientX, touch.clientY);
             });
-
-            // Cũng gắn burst cho các nút (không cần riêng vì sự kiện nổi lên body, nhưng có thể chặn để tránh trùng lặp)
-            // Không cần thêm code vì đã dùng document.
         }
 
-        // =============================================
-        // 5. GYROSCOPE + PARALLAX (MOBILE)
-        // =============================================
+        // ========== GYROSCOPE + PARALLAX (Mobile) ==========
         const nebula1 = document.getElementById('nebula1');
         const nebula2 = document.getElementById('nebula2');
         const nebula3 = document.getElementById('nebula3');
-        // Lưu vị trí parallax hiện tại
-        let currentParallaxX = 0, currentParallaxY = 0;
 
         function handleOrientation(event) {
-            let x = event.gamma; // ngang
-            let y = event.beta;  // dọc
-
-            // Giới hạn nghiêng card
+            let x = event.gamma, y = event.beta;
             const limit = 12;
-            if (x > limit) x = limit;
-            if (x < -limit) x = -limit;
-            if (y > (45 + limit)) y = 45 + limit;
-            if (y < (45 - limit)) y = 45 - limit;
+            if (x > limit) x = limit; if (x < -limit) x = -limit;
+            if (y > 45+limit) y = 45+limit; if (y < 45-limit) y = 45-limit;
 
-            // Card tilt
-            card.style.transform = `rotateY(${x / 1.2}deg) rotateX(${-(y - 45) / 1.2}deg)`;
+            card.style.transform = `rotateY(${x/1.2}deg) rotateX(${-(y-45)/1.2}deg)`;
 
-            // Parallax cho các lớp nền: giá trị càng lớn -> di chuyển càng nhanh (lớp gần)
-            const factor1 = 0.03; // nebula1 (xa nhất)
-            const factor2 = 0.06; // nebula2
-            const factor3 = 0.09; // nebula3 (gần nhất)
-            const factorSpace = 0.02; // space canvas (sao nền)
-
-            const parallaxX = x * factor3; // dùng cho lớp gần nhất, thay đổi theo ý
-            const parallaxY = (y - 45) * factor3;
-
-            // Gán translate cho từng lớp
-            nebula1.style.transform = `translate(${x * factor1}px, ${(y - 45) * factor1}px)`;
-            nebula2.style.transform = `translate(${x * factor2}px, ${(y - 45) * factor2}px)`;
-            nebula3.style.transform = `translate(${x * factor3}px, ${(y - 45) * factor3}px)`;
-            spaceCanvas.style.transform = `translate(${x * factorSpace}px, ${(y - 45) * factorSpace}px)`;
-
-            currentParallaxX = x;
-            currentParallaxY = y - 45;
+            const f1=0.03, f2=0.06, f3=0.09, fSpace=0.02;
+            nebula1.style.transform = `translate(${x*f1}px,${(y-45)*f1}px)`;
+            nebula2.style.transform = `translate(${x*f2}px,${(y-45)*f2}px)`;
+            nebula3.style.transform = `translate(${x*f3}px,${(y-45)*f3}px)`;
+            spaceCanvas.style.transform = `translate(${x*fSpace}px,${(y-45)*fSpace}px)`;
+            // cũng cập nhật distortion offset cho space canvas
+            centerOffX = x * 0.5;
+            centerOffY = (y-45) * 0.5;
         }
 
         function resetParallax() {
-            // Trả về vị trí ban đầu (khi không có gyro hoặc khi thoát)
-            nebula1.style.transform = '';
-            nebula2.style.transform = '';
-            nebula3.style.transform = '';
+            nebula1.style.transform = ''; nebula2.style.transform = ''; nebula3.style.transform = '';
             spaceCanvas.style.transform = '';
+            centerOffX = 0; centerOffY = 0;
         }
 
         function requestGyroPermission() {
             if (typeof DeviceOrientationEvent !== 'undefined') {
                 if (typeof DeviceOrientationEvent.requestPermission === 'function') {
                     DeviceOrientationEvent.requestPermission()
-                        .then(response => {
-                            if (response === 'granted') {
-                                window.addEventListener('deviceorientation', handleOrientation);
-                            }
-                        })
+                        .then(response => { if (response === 'granted') window.addEventListener('deviceorientation', handleOrientation); })
                         .catch(console.error);
                 } else {
                     window.addEventListener('deviceorientation', handleOrientation);
@@ -736,25 +713,17 @@
         }
 
         if (isMobile) {
-            // Khởi tạo gyro khi có tương tác đầu tiên
-            document.body.addEventListener('click', () => {
-                requestGyroPermission();
-            }, { once: true });
-
-            // Khi rời khỏi trang hoặc không còn gyro, reset parallax (tùy chọn)
+            document.body.addEventListener('click', () => requestGyroPermission(), { once: true });
             window.addEventListener('beforeunload', resetParallax);
         }
 
-        // =============================================
-        // 6. AURA SPARKLES (PC ONLY)
-        // =============================================
+        // ========== PC AURA + TILT + MAGNETIC ==========
         const auraCanvas = document.getElementById('aura-canvas');
         const auraCtx = auraCanvas.getContext('2d');
         let auraW, auraH;
         const sparkles = [];
         const MAX_SPARKLES = 150;
-        let mouseX = 0, mouseY = 0;
-        let mouseOnScreen = false;
+        let mouseX = 0, mouseY = 0, mouseOnScreen = false;
 
         function resizeAuraCanvas() {
             auraW = auraCanvas.width = window.innerWidth;
@@ -765,31 +734,26 @@
 
         class Sparkle {
             constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                const angle = Math.random() * Math.PI * 2;
-                const speed = 0.5 + Math.random() * 3;
-                this.vx = Math.cos(angle) * speed;
-                this.vy = Math.sin(angle) * speed + 1;
+                this.x = x; this.y = y;
+                const angle = Math.random() * Math.PI*2;
+                const speed = 0.5 + Math.random()*3;
+                this.vx = Math.cos(angle)*speed;
+                this.vy = Math.sin(angle)*speed + 1;
                 this.life = 1.0;
-                this.decay = 0.006 + Math.random() * 0.02;
-                this.size = 1 + Math.random() * 2.5;
-                this.color = Math.random() < 0.6 ? '#c084fc' : '#e9d5ff';
+                this.decay = 0.006 + Math.random()*0.02;
+                this.size = 1 + Math.random()*2.5;
+                this.color = Math.random()<0.6 ? '#c084fc' : '#e9d5ff';
             }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                this.life -= this.decay;
-            }
+            update() { this.x += this.vx; this.y += this.vy; this.life -= this.decay; }
             draw(ctx) {
-                if (this.life <= 0) return;
+                if (this.life<=0) return;
                 ctx.save();
-                ctx.globalAlpha = this.life * 0.9;
+                ctx.globalAlpha = this.life*0.9;
                 ctx.fillStyle = this.color;
-                ctx.shadowBlur = this.size * 5;
+                ctx.shadowBlur = this.size*5;
                 ctx.shadowColor = this.color;
                 ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
                 ctx.fill();
                 ctx.restore();
             }
@@ -797,22 +761,17 @@
 
         function spawnSparkles(x, y) {
             if (!mouseOnScreen) return;
-            const count = 2;
-            for (let i = 0; i < count; i++) {
-                if (sparkles.length < MAX_SPARKLES) {
-                    sparkles.push(new Sparkle(x, y));
-                }
+            for (let i=0; i<2; i++) {
+                if (sparkles.length < MAX_SPARKLES) sparkles.push(new Sparkle(x, y));
             }
         }
 
         function animateAura() {
             auraCtx.clearRect(0, 0, auraW, auraH);
-            for (let i = sparkles.length - 1; i >= 0; i--) {
+            for (let i=sparkles.length-1; i>=0; i--) {
                 sparkles[i].update();
                 sparkles[i].draw(auraCtx);
-                if (sparkles[i].life <= 0) {
-                    sparkles.splice(i, 1);
-                }
+                if (sparkles[i].life <= 0) sparkles.splice(i,1);
             }
             requestAnimationFrame(animateAura);
         }
@@ -820,48 +779,41 @@
         if (!isMobile) {
             auraCanvas.style.display = 'block';
             animateAura();
-        }
 
-        // =============================================
-        // 7. HIỆU ỨNG PC (Cursor, Tilt, Magnetic, Ripple)
-        // =============================================
-        if (!isMobile) {
-            let cursorX = 0, cursorY = 0;
-            let followerX = 0, followerY = 0;
+            let cursorX = 0, cursorY = 0, followerX = 0, followerY = 0;
 
             window.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-                mouseOnScreen = true;
+                mouseX = e.clientX; mouseY = e.clientY; mouseOnScreen = true;
 
-                mouseGlow.style.left = mouseX + 'px';
-                mouseGlow.style.top = mouseY + 'px';
+                mouseGlow.style.left = mouseX+'px'; mouseGlow.style.top = mouseY+'px';
                 mouseGlow.classList.add('active');
 
-                // Card tilt giới hạn ~12 độ
-                const tiltX = ((window.innerWidth / 2 - mouseX) / 70);
-                const tiltY = ((window.innerHeight / 2 - mouseY) / 70);
+                const tiltX = (window.innerWidth/2 - mouseX)/70;
+                const tiltY = (window.innerHeight/2 - mouseY)/70;
                 card.style.transform = `rotateY(${tiltX}deg) rotateX(${tiltY}deg)`;
+
+                // Distortion offset cho background
+                centerOffX = (mouseX - window.innerWidth/2) * 0.03;
+                centerOffY = (mouseY - window.innerHeight/2) * 0.03;
 
                 spawnSparkles(mouseX, mouseY);
             });
 
             window.addEventListener('mouseleave', () => {
-                card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+                card.style.transform = 'rotateY(0deg) rotateX(0deg)';
                 mouseGlow.classList.remove('active');
                 mouseOnScreen = false;
+                centerOffX = 0; centerOffY = 0;
             });
 
             function animateCursor() {
                 const speed = 0.15;
-                cursorX += (mouseX - cursorX) * speed;
-                cursorY += (mouseY - cursorY) * speed;
-                followerX += (mouseX - followerX) * speed * 0.5;
-                followerY += (mouseY - followerY) * speed * 0.5;
-
-                cursor.style.transform = `translate(${cursorX - 10}px, ${cursorY - 10}px)`;
-                cursorFollower.style.transform = `translate(${followerX - 4}px, ${followerY - 4}px)`;
-
+                cursorX += (mouseX - cursorX)*speed;
+                cursorY += (mouseY - cursorY)*speed;
+                followerX += (mouseX - followerX)*speed*0.5;
+                followerY += (mouseY - followerY)*speed*0.5;
+                cursor.style.transform = `translate(${cursorX-10}px,${cursorY-10}px)`;
+                cursorFollower.style.transform = `translate(${followerX-4}px,${followerY-4}px)`;
                 requestAnimationFrame(animateCursor);
             }
             animateCursor();
@@ -871,47 +823,39 @@
                 el.addEventListener('mouseleave', () => cursor.classList.remove('expand'));
             });
 
-            const buttons = document.querySelectorAll('.btn');
-            buttons.forEach(btn => {
+            // Magnetic buttons
+            document.querySelectorAll('.btn').forEach(btn => {
                 btn.addEventListener('mousemove', (e) => {
                     const rect = btn.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-                    const distance = Math.sqrt(x * x + y * y);
-                    const maxDistance = 100;
-                    if (distance < maxDistance) {
-                        const strength = (maxDistance - distance) / maxDistance;
-                        const moveX = x * strength * 0.3;
-                        const moveY = y * strength * 0.3;
-                        btn.style.setProperty('--tx', `${moveX}px`);
-                        btn.style.setProperty('--ty', `${moveY}px`);
+                    const x = e.clientX - rect.left - rect.width/2;
+                    const y = e.clientY - rect.top - rect.height/2;
+                    const dist = Math.sqrt(x*x+y*y);
+                    if (dist < 100) {
+                        const strength = (100 - dist)/100;
+                        btn.style.setProperty('--tx', `${x*strength*0.3}px`);
+                        btn.style.setProperty('--ty', `${y*strength*0.3}px`);
                         btn.classList.add('magnetic');
                     }
                 });
                 btn.addEventListener('mouseleave', () => {
-                    btn.style.setProperty('--tx', '0');
-                    btn.style.setProperty('--ty', '0');
+                    btn.style.setProperty('--tx','0'); btn.style.setProperty('--ty','0');
                     btn.classList.remove('magnetic');
                 });
             });
 
+            // Ripple on click
             document.addEventListener('click', (e) => {
                 const ripple = document.createElement('div');
                 ripple.className = 'ripple';
-                ripple.style.left = e.clientX + 'px';
-                ripple.style.top = e.clientY + 'px';
-                ripple.style.width = '10px';
-                ripple.style.height = '10px';
+                ripple.style.left = e.clientX+'px'; ripple.style.top = e.clientY+'px';
+                ripple.style.width = '10px'; ripple.style.height = '10px';
                 document.body.appendChild(ripple);
                 setTimeout(() => ripple.remove(), 600);
             });
         }
 
-        // =============================================
-        // 8. HIỆU ỨNG MOBILE KHÁC (Ripple, Long Press, Haptic)
-        // =============================================
+        // ========== MOBILE RIPPLE & LONG PRESS ==========
         if (isMobile) {
-            // Ripple on touch cho các nút (giữ lại)
             document.querySelectorAll('.btn').forEach(btn => {
                 btn.addEventListener('touchstart', (e) => {
                     const rect = btn.getBoundingClientRect();
@@ -919,42 +863,32 @@
                     const y = e.touches[0].clientY - rect.top;
                     const ripple = document.createElement('div');
                     ripple.className = 'ripple';
-                    ripple.style.left = x + 'px';
-                    ripple.style.top = y + 'px';
-                    ripple.style.width = '10px';
-                    ripple.style.height = '10px';
+                    ripple.style.left = x+'px'; ripple.style.top = y+'px';
+                    ripple.style.width = '10px'; ripple.style.height = '10px';
                     ripple.style.position = 'absolute';
                     btn.appendChild(ripple);
                     setTimeout(() => ripple.remove(), 600);
                 });
-            });
-
-            // Haptic Feedback
-            document.querySelectorAll('.btn').forEach(btn => {
                 btn.addEventListener('touchstart', () => {
                     if (navigator.vibrate) navigator.vibrate(10);
                 });
             });
 
-            // Long Press Effect
             let longPressTimer;
             document.querySelectorAll('.btn').forEach(btn => {
                 btn.addEventListener('touchstart', (e) => {
                     longPressTimer = setTimeout(() => {
-                        btn.style.transform = 'scale(1.1)';
-                        if (navigator.vibrate) navigator.vibrate([20, 10, 20]);
+                        btn.style.transform = 'scale(1.05)';
+                        if (navigator.vibrate) navigator.vibrate([20,10,20]);
                     }, 500);
                 });
                 btn.addEventListener('touchend', () => {
                     clearTimeout(longPressTimer);
-                    btn.style.transform = 'scale(1)';
+                    btn.style.transform = '';
                 });
-                btn.addEventListener('touchmove', () => {
-                    clearTimeout(longPressTimer);
-                });
+                btn.addEventListener('touchmove', () => clearTimeout(longPressTimer));
             });
         }
-
     </script>
 </body>
 </html>
