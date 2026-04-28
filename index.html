@@ -288,6 +288,14 @@
       align-items: center;
       gap: 8px;
     }
+    .volume-label {
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--accent-color);
+      text-shadow: 0 0 6px var(--accent-color);
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
     .volume-slider {
       -webkit-appearance: none;
       appearance: none;
@@ -340,7 +348,7 @@
 
 <div class="music-player" id="musicPlayer">
   <div class="music-row">
-    <span class="track-info" id="trackInfo">🎵 Now Playing: ...</span>
+    <span class="track-info" id="trackInfo">🎵 Đang chill cùng: ...</span>
     <button class="music-btn" id="playPauseBtn">
       <span class="bracket-tl"></span>
       <span class="bracket-br"></span>
@@ -367,6 +375,7 @@
     </div>
   </div>
   <div class="volume-section">
+    <span class="volume-label">VOLUME</span>
     <input type="range" id="volumeSlider" min="0" max="100" value="70" class="volume-slider">
   </div>
   <canvas id="visualizer" width="80" height="30"></canvas>
@@ -456,7 +465,7 @@
   // ========== LOCAL STORAGE ==========
   if (!localStorage.getItem('e14n_visited')) {
     localStorage.setItem('e14n_visited', '1');
-    showMsg(' Yooo,hohoohoho Xin Chào Nha !👋!');
+    showMsg(' Yooo,hohoohoho Xin Chào Nha ! 👋 !');
   } else showMsg(' Về Rồi Đó Hả 😉 ');
   function showMsg(m) {
     let d = document.createElement('div'); d.id = 'welcome-msg'; d.textContent = m;
@@ -528,7 +537,7 @@
   // ========== MOBILE EXTRA ==========
   if(isMobile){document.querySelectorAll('.btn,.music-btn').forEach(b=>{b.addEventListener('touchstart',e=>{let r=document.createElement('div');r.className='ripple';let rect=b.getBoundingClientRect();r.style.left=(e.touches[0].clientX-rect.left)+'px';r.style.top=(e.touches[0].clientY-rect.top)+'px';r.style.width='10px';r.style.height='10px';r.style.position='absolute';b.appendChild(r);setTimeout(()=>r.remove(),600);if(navigator.vibrate)navigator.vibrate(10);});});}
 
-  // ==================== MUSIC ENGINE (SMART + VOLUME) ====================
+  // ==================== MUSIC ENGINE (TINH CHỈNH CUỐI CÙNG) ====================
   const playPauseBtn = document.getElementById('playPauseBtn');
   const playPauseBtnText = playPauseBtn.querySelector('.btn-text');
   const skipBtn = document.getElementById('skipBtn');
@@ -540,7 +549,7 @@
   const visualCtx = visualizerCanvas.getContext('2d');
   const volumeSlider = document.getElementById('volumeSlider');
 
-  // Danh sách nhạc (10 bài mẫu)
+  // Danh sách nhạc của bạn (GIỮ NGUYÊN 100%)
   const musicList = [
     { url: "https://files.catbox.moe/g4ry06.mp3", title: "Justin Bieber - Beauty And A Beat" },
     { url: "https://files.catbox.moe/p1nny3.mp3", title: "Justin Bieber - Baby ft. Ludacris" },
@@ -658,7 +667,7 @@
     playRandomTrack();
   }
 
-  // Kiểm tra một link mp3 có thể phát được không (có dữ liệu)
+  // Kiểm tra link mp3 có sống không
   function checkUrl(url) {
     return new Promise((resolve) => {
       if (!url) { resolve(false); return; }
@@ -688,7 +697,6 @@
       };
       testAudio.addEventListener('canplay', handleSuccess);
       testAudio.addEventListener('error', handleError);
-      // Timeout 5s
       setTimeout(() => {
         if (!resolved) {
           resolved = true;
@@ -737,7 +745,8 @@
       await audio.play();
       currentTrackIndex = index;
       isPlaying = true;
-      trackInfo.textContent = `🎵 Now Playing: ${musicList[index].title}`;
+      // Cập nhật tên bài hát khi phát thành công
+      trackInfo.textContent = `🎵 Đang chill cùng: ${musicList[index].title}`;
       playPauseBtnText.textContent = 'PAUSE';
       progressFill.style.width = '0%';
       currentTimeEl.textContent = '00:00';
@@ -751,7 +760,7 @@
       unloadCurrentTrack();
       isPlaying = false;
       playPauseBtnText.textContent = 'PLAY';
-      trackInfo.textContent = '🎵 Now Playing: ...';
+      trackInfo.textContent = '🎵 Đang chill cùng: ...';
       return false;
     }
   }
@@ -760,13 +769,16 @@
     const total = musicList.length;
     if (total === 0) return;
 
+    // Hiển thị trạng thái chờ
+    trackInfo.textContent = '🎵 Chờ tí nhé...';
+
     // Tạo mảng index ưu tiên, loại trừ bài hiện tại
     let indices = [];
     for (let i = 0; i < total; i++) {
       if (i !== currentTrackIndex) indices.push(i);
     }
     if (indices.length === 0) {
-      indices = [0]; // fallback về bài duy nhất
+      indices = [0]; // fallback
     }
 
     // Xáo trộn
@@ -781,16 +793,14 @@
       const valid = await checkUrl(url);
       if (valid) {
         const success = await playTrack(idx);
-        if (success) return; // phát thành công
-        // nếu playTrack thất bại (dù link ok), tiếp tục tìm bài khác
+        if (success) return; // phát thành công, playTrack đã đặt lại tên bài
       }
     }
 
-    // Không có link nào sống hoặc không thể phát
+    // Nếu không còn link nào sống
     showMsg('🎵 No playable music found');
-    // Reset giao diện
+    trackInfo.textContent = '🎵 Đang chill cùng: ...';
     playPauseBtnText.textContent = 'PLAY';
-    trackInfo.textContent = '🎵 Now Playing: ...';
     progressFill.style.width = '0%';
     currentTimeEl.textContent = '00:00';
     totalTimeEl.textContent = '00:00';
@@ -800,6 +810,7 @@
 
   function togglePlayPause() {
     if (!audio) {
+      // Bắt đầu tìm nhạc mới
       playRandomTrack();
       return;
     }
@@ -821,7 +832,6 @@
         drawVisualizer();
       }).catch(err => {
         console.error('Resume failed:', err);
-        // Nếu resume lỗi, coi như dừng
         isPlaying = false;
         playPauseBtnText.textContent = 'PLAY';
       });
@@ -829,7 +839,7 @@
   }
 
   function skipTrack() {
-    // Hủy bài hiện tại và tìm bài mới
+    // Reset giao diện về trạng thái chờ
     unloadCurrentTrack();
     isPlaying = false;
     stopAnimationFrames();
@@ -838,6 +848,8 @@
     currentTimeEl.textContent = '00:00';
     totalTimeEl.textContent = '00:00';
     visualCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
+
+    // Bắt đầu tìm bài mới
     playRandomTrack();
   }
 
