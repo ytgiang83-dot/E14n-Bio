@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" style="height: 100%; overflow: hidden;">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>E14n – Trạm Kiến Thức</title>
   <style>
     :root {
@@ -26,14 +26,14 @@
       background-color: #020012;
       color: var(--text-main);
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      overflow: hidden;
-      height: 100vh;
+      height: 100%;
       width: 100vw;
       display: flex;
       justify-content: center;
       align-items: center;
       perspective: 1000px;
       cursor: none;
+      overflow: hidden;
     }
 
     .nebula {
@@ -392,6 +392,12 @@
 </div>
 
 <script>
+  // ==================== FIX LỖI NHẢY VỊ TRÍ KHI F5 ====================
+  if (history.scrollRestoration) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+
   // ==================== DỮ LIỆU MÔN HỌC (GIỮ NGUYÊN 100%) ====================
   const SUBJECT_DATA = [
     { name: "📜 ÔN TẬP LỊCH SỬ ( KHÔNG CHỌN )", link: "https://lichsu.ytgiang83.workers.dev/" },
@@ -537,7 +543,7 @@
   // ========== MOBILE EXTRA ==========
   if(isMobile){document.querySelectorAll('.btn,.music-btn').forEach(b=>{b.addEventListener('touchstart',e=>{let r=document.createElement('div');r.className='ripple';let rect=b.getBoundingClientRect();r.style.left=(e.touches[0].clientX-rect.left)+'px';r.style.top=(e.touches[0].clientY-rect.top)+'px';r.style.width='10px';r.style.height='10px';r.style.position='absolute';b.appendChild(r);setTimeout(()=>r.remove(),600);if(navigator.vibrate)navigator.vibrate(10);});});}
 
-  // ==================== MUSIC ENGINE (TINH CHỈNH CUỐI CÙNG) ====================
+  // ==================== MUSIC ENGINE (TINH CHỈNH + FIX LỖI NHẢY) ====================
   const playPauseBtn = document.getElementById('playPauseBtn');
   const playPauseBtnText = playPauseBtn.querySelector('.btn-text');
   const skipBtn = document.getElementById('skipBtn');
@@ -630,7 +636,6 @@
     const dataArray = new Uint8Array(bufferLength);
     analyser.getByteFrequencyData(dataArray);
 
-    // Hệ số âm lượng để sóng nhảy theo volume
     const vol = audio ? audio.volume : 1;
 
     visualCtx.clearRect(0, 0, W, H);
@@ -745,7 +750,6 @@
       await audio.play();
       currentTrackIndex = index;
       isPlaying = true;
-      // Cập nhật tên bài hát khi phát thành công
       trackInfo.textContent = `🎵 Đang chill cùng: ${musicList[index].title}`;
       playPauseBtnText.textContent = 'PAUSE';
       progressFill.style.width = '0%';
@@ -772,16 +776,14 @@
     // Hiển thị trạng thái chờ
     trackInfo.textContent = '🎵 Chờ tí nhé...';
 
-    // Tạo mảng index ưu tiên, loại trừ bài hiện tại
     let indices = [];
     for (let i = 0; i < total; i++) {
       if (i !== currentTrackIndex) indices.push(i);
     }
     if (indices.length === 0) {
-      indices = [0]; // fallback
+      indices = [0];
     }
 
-    // Xáo trộn
     for (let i = indices.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [indices[i], indices[j]] = [indices[j], indices[i]];
@@ -793,11 +795,11 @@
       const valid = await checkUrl(url);
       if (valid) {
         const success = await playTrack(idx);
-        if (success) return; // phát thành công, playTrack đã đặt lại tên bài
+        if (success) return;
       }
     }
 
-    // Nếu không còn link nào sống
+    // Không có link nào sống
     showMsg('🎵 No playable music found');
     trackInfo.textContent = '🎵 Đang chill cùng: ...';
     playPauseBtnText.textContent = 'PLAY';
@@ -810,7 +812,6 @@
 
   function togglePlayPause() {
     if (!audio) {
-      // Bắt đầu tìm nhạc mới
       playRandomTrack();
       return;
     }
@@ -839,7 +840,6 @@
   }
 
   function skipTrack() {
-    // Reset giao diện về trạng thái chờ
     unloadCurrentTrack();
     isPlaying = false;
     stopAnimationFrames();
@@ -849,11 +849,9 @@
     totalTimeEl.textContent = '00:00';
     visualCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
 
-    // Bắt đầu tìm bài mới
     playRandomTrack();
   }
 
-  // Sự kiện nút Play/Pause
   playPauseBtn.addEventListener('click', (e) => {
     e.preventDefault();
     togglePlayPause();
@@ -863,7 +861,6 @@
     togglePlayPause();
   });
 
-  // Sự kiện nút Skip
   skipBtn.addEventListener('click', (e) => {
     e.preventDefault();
     skipTrack();
@@ -873,7 +870,6 @@
     skipTrack();
   });
 
-  // Sự kiện thanh âm lượng
   volumeSlider.addEventListener('input', () => {
     currentVolume = parseFloat(volumeSlider.value) / 100;
     localStorage.setItem('musicVolume', currentVolume);
@@ -882,7 +878,6 @@
     }
   });
 
-  // Khởi động visualizer loop (chạy nền)
   drawVisualizer();
 </script>
 </body>
