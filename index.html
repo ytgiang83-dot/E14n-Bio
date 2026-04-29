@@ -665,7 +665,7 @@
         // Autoplay bị chặn: cập nhật giao diện để người dùng bấm PLAY thủ công
         musicStatus.textContent = ' Nhấn PLAY để nghe nà ';
         guiContainer.classList.add('is-playing'); // Hiện nút PLAY/PAUSE
-        playBtnGui.textContent = '▶ PLAY';
+        playBtnGui.textContent = 'PLAY';
         updateVinylState();
       }
     }, AUTOPLAY_TIMEOUT);
@@ -693,7 +693,7 @@
     scWidget.bind(SC.Widget.Events.PLAY, () => {
       clearAutoplayFallback(); // Autoplay thành công → hủy fallback timer
       isPlaying = true;
-      playBtnGui.textContent = '⏸ PAUSE';
+      playBtnGui.textContent = 'PAUSE';
       musicStatus.textContent = '🎵 Đang chill';
       updateVinylState();
       guiContainer.classList.add('is-playing');
@@ -707,7 +707,7 @@
 
     scWidget.bind(SC.Widget.Events.PAUSE, () => {
       isPlaying = false;
-      playBtnGui.textContent = '▶ PLAY';
+      playBtnGui.textContent = 'PLAY';
       updateVinylState();
     });
 
@@ -727,7 +727,7 @@
     scWidget.bind(SC.Widget.Events.FINISH, () => {
       clearAutoplayFallback();
       isPlaying = false;
-      playBtnGui.textContent = '▶ PLAY';
+      playBtnGui.textContent = 'PLAY';
       progressFillGui.style.width = '0%';
       currentTimeGui.textContent = '00:00';
       totalTimeGui.textContent = '00:00';
@@ -741,7 +741,7 @@
       clearAutoplayFallback();
       scErrorMsg('⚠️ Không thể phát bản nhạc này từ SoundCloud');
       isPlaying = false;
-      playBtnGui.textContent = '▶ PLAY';
+      playBtnGui.textContent = 'PLAY';
       progressFillGui.style.width = '0%';
       currentTimeGui.textContent = '00:00';
       totalTimeGui.textContent = '00:00';
@@ -770,11 +770,11 @@
     gui.classList.remove('fade-out');
     updateVinylState();
     if (isPlaying) {
-      playBtnGui.textContent = '⏸ PAUSE';
+      playBtnGui.textContent = 'PAUSE';
       musicStatus.textContent = '🎵 Đang chill';
       guiContainer.classList.add('is-playing');
     } else {
-      playBtnGui.textContent = '▶ PLAY';
+      playBtnGui.textContent = 'PLAY';
       // Nếu đang ở trạng thái "Đã tải - Nhấn PLAY" thì giữ nguyên status đó
       if (!guiContainer.classList.contains('is-playing')) {
         musicStatus.textContent = '🎵 Một chút nhạc';
