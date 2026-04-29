@@ -68,17 +68,10 @@
       100% { transform: translate(40px, -30px) scale(1.2); }
     }
 
+    /* ── Chỉ giữ lại Space Canvas, đã xóa aura-canvas và burst-canvas ── */
     #space-canvas {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       pointer-events: none; z-index: -1;
-    }
-    #aura-canvas {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; z-index: 9995; display: none;
-    }
-    #burst-canvas {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; z-index: 9996; display: none;
     }
 
     #welcome-msg {
@@ -225,138 +218,74 @@
 
     /* ========== LỐI VÀO MUSIC MODE ========== */
     .music-entry {
-      position: fixed;
-      top: 25px;
-      left: 25px;
-      z-index: 100;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 8px;
+      position: fixed; top: 25px; left: 25px; z-index: 100;
+      display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
     }
     .music-entry-text {
-      font-size: 12px;
-      font-weight: 500;
-      color: #e9d5ff;
-      text-shadow: 0 0 8px var(--accent-color);
-      letter-spacing: 0.5px;
+      font-size: 12px; font-weight: 500; color: #e9d5ff;
+      text-shadow: 0 0 8px var(--accent-color); letter-spacing: 0.5px;
     }
     .music-entry-btn {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
+      width: 50px; height: 50px; border-radius: 50%;
       background: rgba(20, 20, 50, 0.5);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       border: 1px solid rgba(192,132,252,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      color: #c084fc;
-      cursor: pointer;
-      box-shadow: 0 0 15px #c084fc;
-      transition: box-shadow 0.3s, transform 0.2s;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; color: #c084fc; cursor: pointer;
+      box-shadow: 0 0 15px #c084fc; transition: box-shadow 0.3s, transform 0.2s;
     }
-    .music-entry-btn:hover {
-      box-shadow: 0 0 30px #c084fc;
-      transform: scale(1.1);
-    }
+    .music-entry-btn:hover { box-shadow: 0 0 30px #c084fc; transform: scale(1.1); }
 
     /* ========== MUSIC GUI FULLSCREEN ========== */
     #music-gui {
-      position: fixed;
-      inset: 0;
-      z-index: 9990;
+      position: fixed; inset: 0; z-index: 9990;
       background: rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transition: opacity 0.4s ease;
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      display: none; justify-content: center; align-items: center;
+      opacity: 0; transition: opacity 0.4s ease;
     }
-    #music-gui.active {
-      display: flex;
-      opacity: 1;
-    }
-    #music-gui.fade-out {
-      opacity: 0;
-    }
+    #music-gui.active { display: flex; opacity: 1; }
+    #music-gui.fade-out { opacity: 0; }
 
     .gui-container {
-      position: relative;
-      z-index: 2;
-      width: 90%;
-      max-width: 400px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      padding: 30px 20px;
+      position: relative; z-index: 2; width: 90%; max-width: 400px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 20px; padding: 30px 20px;
       background: rgba(20, 10, 40, 0.5);
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(192,132,252,0.4);
-      border-radius: 40px;
+      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(192,132,252,0.4); border-radius: 40px;
       box-shadow: 0 0 40px rgba(168,85,247,0.2);
       transform: scale(0.9);
       transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       cursor: default;
     }
-    #music-gui.active .gui-container {
-      transform: scale(1);
-    }
+    #music-gui.active .gui-container { transform: scale(1); }
 
     .close-btn {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      background: none;
-      border: none;
-      color: var(--accent-color);
-      font-size: 28px;
-      cursor: pointer;
-      z-index: 10;
-      text-shadow: 0 0 15px var(--accent-color);
-      transition: transform 0.2s;
+      position: absolute; top: 15px; right: 20px;
+      background: none; border: none; color: var(--accent-color);
+      font-size: 28px; cursor: pointer; z-index: 10;
+      text-shadow: 0 0 15px var(--accent-color); transition: transform 0.2s;
     }
-    .close-btn:hover {
-      transform: scale(1.2);
-    }
+    .close-btn:hover { transform: scale(1.2); }
 
-    .vinyl-wrapper {
-      position: relative;
-      width: 200px;
-      height: 200px;
-    }
+    .vinyl-wrapper { position: relative; width: 200px; height: 200px; }
     .vinyl-image {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 0 30px rgba(168,85,247,0.5);
-      transition: box-shadow 0.3s;
+      width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+      box-shadow: 0 0 30px rgba(168,85,247,0.5); transition: box-shadow 0.3s;
     }
-    .vinyl-image.spinning {
-      animation: spin 2s linear infinite;
-    }
+    .vinyl-image.spinning { animation: spin 2s linear infinite; }
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
     .neon-ring {
-      position: absolute;
-      top: -15px;
-      left: -15px;
-      width: calc(100% + 30px);
-      height: calc(100% + 30px);
+      position: absolute; top: -15px; left: -15px;
+      width: calc(100% + 30px); height: calc(100% + 30px);
       border-radius: 50%;
       border: 2px solid rgba(192,132,252,0.5);
       box-shadow: 0 0 25px rgba(192,132,252,0.4), inset 0 0 15px rgba(192,132,252,0.2);
-      z-index: 0;
-      pointer-events: none;
+      z-index: 0; pointer-events: none;
       animation: neonPulse 1.8s ease-in-out infinite;
     }
     @keyframes neonPulse {
@@ -365,64 +294,42 @@
     }
 
     .music-status {
-      font-size: 18px;
-      font-weight: 600;
-      color: #e9d5ff;
-      text-shadow: 0 0 20px var(--accent-color);
-      letter-spacing: 2px;
+      font-size: 18px; font-weight: 600; color: #e9d5ff;
+      text-shadow: 0 0 20px var(--accent-color); letter-spacing: 2px;
     }
 
-    /* ========== CONTROL PANEL – căn giữa hoàn toàn ========== */
+    /* ========== CONTROL PANEL ========== */
     .control-panel {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
-      margin-top: 10px;
-      /* ĐÃ XÓA: transform: translateX(-8px) – đây là nguồn gốc lệch trục */
+      width: 100%; display: flex; flex-direction: column;
+      gap: 12px; align-items: center; margin-top: 10px;
     }
-
     .sc-input {
-      width: 100%;
-      background: rgba(20, 20, 50, 0.5);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 20px;
-      padding: 10px 15px;
-      color: white;
-      font-size: 12px;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      outline: none;
-      text-align: center;
+      width: 100%; background: rgba(20, 20, 50, 0.5);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
+      padding: 10px 15px; color: white; font-size: 12px;
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      outline: none; text-align: center;
     }
-    .sc-input::placeholder {
-      color: rgba(255,255,255,0.3);
-    }
+    .sc-input::placeholder { color: rgba(255,255,255,0.3); }
 
-    /* ── Wrapper chứa 2 nút: dùng relative + chiều cao cố định ── */
+    /* ── Wrapper 2 nút: relative + chiều cao cố định ── */
     .control-buttons {
       position: relative;
       width: 100%;
-      height: 44px; /* khớp với padding + font của .ctrl-btn */
+      height: 44px;
     }
 
-    /* ── Nút chung: absolute, dịch từ tâm 50% ── */
+    /* ── Nút chung: absolute, định vị từ tâm 50% ── */
     .ctrl-btn {
       position: absolute;
       top: 0;
-      /* left được ghi đè ở từng nút */
-      width: 110px;                /* kích thước đồng nhất */
+      width: 110px;
       background: rgba(20, 20, 50, 0.5);
       border: 1px solid rgba(255,255,255,0.1);
-      color: white;
-      border-radius: 25px;
-      padding: 10px 0;
-      font-size: 13px;
-      font-weight: 600;
+      color: white; border-radius: 25px;
+      padding: 10px 0; font-size: 13px; font-weight: 600;
       cursor: pointer;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       text-align: center;
       transition: border-color 0.3s, box-shadow 0.3s,
                   transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
@@ -433,105 +340,71 @@
       box-shadow: 0 0 20px rgba(168,85,247,0.4);
     }
 
-    /* ── Nút LOAD ── */
-    /* Mặc định: nằm chính giữa (translateX(-50%) → tâm nút = tâm container) */
+    /* ── Nút LOAD: mặc định ở giữa, khi playing trượt trái 65px ── */
     #loadBtnGui {
       left: 50%;
       transform: translateX(-50%);
     }
-    /* Khi playing: trượt sang trái 65px tính từ tâm */
     .gui-container.is-playing #loadBtnGui {
       transform: translateX(calc(-50% - 65px));
     }
 
-    /* ── Nút PLAY/PAUSE ── */
-    /* Mặc định: ẩn, nằm ở vị trí bên phải nhưng hơi thấp hơn để tạo hiệu ứng trượt lên */
+    /* ── Nút PLAY/PAUSE: ẩn mặc định, khi playing trượt ra phải 65px ── */
     #playBtnGui {
       left: 50%;
       transform: translateX(calc(-50% + 65px)) translateY(14px);
       opacity: 0;
       pointer-events: none;
     }
-    /* Khi playing: hiện ra, đối xứng với LOAD (cách tâm 65px về bên phải) */
     .gui-container.is-playing #playBtnGui {
       transform: translateX(calc(-50% + 65px)) translateY(0);
       opacity: 1;
       pointer-events: auto;
     }
 
-    /* ── Thanh tiến trình ── */
-    .progress-container {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+    .progress-container { width: 100%; display: flex; flex-direction: column; gap: 4px; }
     .progress-bar {
-      width: 100%;
-      height: 4px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 2px;
-      overflow: hidden;
+      width: 100%; height: 4px; background: rgba(255,255,255,0.1);
+      border-radius: 2px; overflow: hidden;
     }
     .progress-fill {
-      height: 100%;
-      width: 0%;
+      height: 100%; width: 0%;
       background: linear-gradient(90deg, #a855f7, #c084fc);
-      box-shadow: 0 0 10px #a855f7;
-      border-radius: 2px;
+      box-shadow: 0 0 10px #a855f7; border-radius: 2px;
       transition: width 0.1s linear;
     }
     .time-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 10px;
-      color: #c084fc;
+      display: flex; justify-content: space-between;
+      font-size: 10px; color: #c084fc;
       text-shadow: 0 0 6px var(--accent-color);
     }
     .volume-row {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 5px;
+      width: 100%; display: flex; align-items: center;
+      gap: 8px; margin-top: 5px;
     }
     .volume-label {
-      font-size: 10px;
-      color: var(--accent-color);
-      text-shadow: 0 0 6px var(--accent-color);
-      white-space: nowrap;
+      font-size: 10px; color: var(--accent-color);
+      text-shadow: 0 0 6px var(--accent-color); white-space: nowrap;
     }
     .volume-slider {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      height: 4px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 2px;
-      outline: none;
-      cursor: pointer;
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 4px; background: rgba(255,255,255,0.1);
+      border-radius: 2px; outline: none; cursor: pointer;
     }
     .volume-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 14px; height: 14px;
-      border-radius: 50%;
-      background: #c084fc;
-      box-shadow: 0 0 10px #a855f7;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #c084fc; box-shadow: 0 0 10px #a855f7;
     }
 
     #sc-widget {
-      position: absolute;
-      top: -9999px;
-      left: -9999px;
-      width: 300px;
-      height: 200px;
-      pointer-events: none;
+      position: absolute; top: -9999px; left: -9999px;
+      width: 300px; height: 200px; pointer-events: none;
     }
 
     @media (max-width: 768px) {
       body { cursor: auto; }
       .cursor, .cursor-follower { display: none; }
-      #aura-canvas { display: none !important; }
       .music-entry { top: 15px; left: 15px; }
       .music-entry-text { font-size: 10px; }
       .music-entry-btn { width: 42px; height: 42px; font-size: 18px; }
@@ -543,9 +416,8 @@
 <div class="nebula nebula-2" id="nebula2"></div>
 <div class="nebula nebula-3" id="nebula3"></div>
 
+<!-- Chỉ giữ lại space-canvas, đã xóa aura-canvas và burst-canvas -->
 <canvas id="space-canvas"></canvas>
-<canvas id="burst-canvas"></canvas>
-<canvas id="aura-canvas"></canvas>
 
 <div class="mouse-glow" id="mouseGlow"></div>
 <div class="cursor" id="cursor"></div>
@@ -599,7 +471,7 @@
   if (history.scrollRestoration) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
 
-  // ==================== DỮ LIỆU MÔN HỌC (GIỮ NGUYÊN 100%) ====================
+  // ==================== DỮ LIỆU MÔN HỌC ====================
   const SUBJECT_DATA = [
     { name: "📜 ÔN TẬP LỊCH SỬ ( KHÔNG CHỌN )", link: "https://lichsu.e14n.workers.dev/" },
     { name: "🇬🇧 ÔN TẬP TIẾNG ANH ( KHÔNG CHỌN )", link: "https://tienganh.e14n.workers.dev/" },
@@ -620,7 +492,7 @@
     listContainer.appendChild(a);
   });
 
-  // ========== SPACE WARP ==========
+  // ========== SPACE WARP (GIỮ NGUYÊN 100%) ==========
   const spaceCanvas = document.getElementById('space-canvas');
   const spaceCtx = spaceCanvas.getContext('2d');
   let spaceW, spaceH, baseCenterX, baseCenterY, centerOffX = 0, centerOffY = 0;
@@ -676,29 +548,7 @@
     document.body.appendChild(d); setTimeout(() => d.remove(), 3000);
   }
 
-  // ========== MOBILE BURST ==========
-  const burstCanvas = document.getElementById('burst-canvas'), burstCtx = burstCanvas.getContext('2d');
-  let burstW, burstH, burstParticles = [];
-  function resizeBurst() { burstW = burstCanvas.width = innerWidth; burstH = burstCanvas.height = innerHeight; }
-  window.addEventListener('resize', resizeBurst); resizeBurst();
-  class BurstParticle {
-    constructor(x,y) {
-      this.x=x; this.y=y; let a=Math.random()*Math.PI*2, s=2+Math.random()*5;
-      this.vx=Math.cos(a)*s; this.vy=Math.sin(a)*s; this.life=1; this.decay=0.02+Math.random()*0.03;
-      this.size=1.5+Math.random()*3; this.color=Math.random()<0.5?'#c084fc':'#e9d5ff';
-    }
-    update(){this.x+=this.vx; this.y+=this.vy; this.life-=this.decay;}
-    draw(ctx){if(this.life<=0)return;ctx.save();ctx.globalAlpha=this.life*0.8;ctx.fillStyle=this.color;ctx.shadowBlur=this.size*4;ctx.shadowColor=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();ctx.restore();}
-  }
-  function burst(x,y) { for(let i=0;i<20;i++) if(burstParticles.length<200) burstParticles.push(new BurstParticle(x,y)); }
-  function animateBurst() {
-    burstCtx.clearRect(0,0,burstW,burstH);
-    for(let i=burstParticles.length-1;i>=0;i--){burstParticles[i].update();burstParticles[i].draw(burstCtx);if(burstParticles[i].life<=0)burstParticles.splice(i,1);}
-    requestAnimationFrame(animateBurst);
-  }
-  if(isMobile){burstCanvas.style.display='block';animateBurst();document.addEventListener('touchstart',e=>burst(e.touches[0].clientX, e.touches[0].clientY));}
-
-  // ========== GYRO ==========
+  // ========== GYRO (GIỮ NGUYÊN 100%) ==========
   const neb1=document.getElementById('nebula1'), neb2=document.getElementById('nebula2'), neb3=document.getElementById('nebula3');
   function handleOrient(e) {
     let x=e.gamma,y=e.beta; const lim=12; if(x>lim)x=lim;if(x<-lim)x=-lim;if(y>57)y=57;if(y<33)y=33;
@@ -710,69 +560,122 @@
   }
   if(isMobile){document.body.addEventListener('click',()=>{if(typeof DeviceOrientationEvent?.requestPermission==='function')DeviceOrientationEvent.requestPermission().then(r=>{if(r==='granted')window.addEventListener('deviceorientation',handleOrient);});else window.addEventListener('deviceorientation',handleOrient);},{once:true});}
 
-  // ========== PC AURA ==========
-  const auraCanvas=document.getElementById('aura-canvas'),auraCtx=auraCanvas.getContext('2d');
-  let auraW,auraH,sparkles=[],mouseX=0,mouseY=0,mouseOn=false;
-  function resizeAura(){auraW=auraCanvas.width=innerWidth;auraH=auraCanvas.height=innerHeight;}
-  window.addEventListener('resize',resizeAura);resizeAura();
-  class Sparkle{
-    constructor(x,y){this.x=x;this.y=y;let a=Math.random()*Math.PI*2,s=0.5+Math.random()*3;this.vx=Math.cos(a)*s;this.vy=Math.sin(a)*s+1;this.life=1;this.decay=0.006+Math.random()*0.02;this.size=1+Math.random()*2.5;this.color=Math.random()<0.6?'#c084fc':'#e9d5ff';}
-    update(){this.x+=this.vx;this.y+=this.vy;this.life-=this.decay;}
-    draw(ctx){if(this.life<=0)return;ctx.save();ctx.globalAlpha=this.life*0.9;ctx.fillStyle=this.color;ctx.shadowBlur=this.size*5;ctx.shadowColor=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();ctx.restore();}
-  }
-  function animAura(){auraCtx.clearRect(0,0,auraW,auraH);for(let i=sparkles.length-1;i>=0;i--){sparkles[i].update();sparkles[i].draw(auraCtx);if(sparkles[i].life<=0)sparkles.splice(i,1);}requestAnimationFrame(animAura);}
+  // ========== PC: MOUSE GLOW + CURSOR + 3D TILT (không có Sparkle) ==========
   if(!isMobile){
-    auraCanvas.style.display='block';animAura();
-    let cX=0,cY=0,fX=0,fY=0;
-    window.addEventListener('mousemove',e=>{
-      mouseX=e.clientX;mouseY=e.clientY;mouseOn=true;
-      mouseGlow.style.left=mouseX+'px';mouseGlow.style.top=mouseY+'px';mouseGlow.classList.add('active');
+    let cX=0, cY=0, fX=0, fY=0, mouseX=0, mouseY=0;
+    window.addEventListener('mousemove', e => {
+      mouseX=e.clientX; mouseY=e.clientY;
+      mouseGlow.style.left=mouseX+'px'; mouseGlow.style.top=mouseY+'px';
+      mouseGlow.classList.add('active');
       card.style.transform=`rotateY(${(innerWidth/2-mouseX)/70}deg) rotateX(${(innerHeight/2-mouseY)/70}deg)`;
       centerOffX=(mouseX-innerWidth/2)*0.03; centerOffY=(mouseY-innerHeight/2)*0.03;
-      for(let i=0;i<2;i++) if(sparkles.length<150) sparkles.push(new Sparkle(mouseX,mouseY));
     });
-    window.addEventListener('mouseleave',()=>{card.style.transform='';mouseGlow.classList.remove('active');mouseOn=false;centerOffX=0;centerOffY=0;});
-    (function animCursor(){cX+=(mouseX-cX)*0.15;cY+=(mouseY-cY)*0.15;fX+=(mouseX-fX)*0.075;fY+=(mouseY-fY)*0.075;cursor.style.transform=`translate(${cX-10}px,${cY-10}px)`;cursorFollower.style.transform=`translate(${fX-4}px,${fY-4}px)`;requestAnimationFrame(animCursor);})();
-    document.querySelectorAll('.btn,.profile-section img,h1,.music-entry-btn,.ctrl-btn,.close-btn').forEach(el=>{el.addEventListener('mouseenter',()=>cursor.classList.add('expand'));el.addEventListener('mouseleave',()=>cursor.classList.remove('expand'));});
-    document.querySelectorAll('.btn').forEach(btn=>{btn.addEventListener('mousemove',e=>{let r=btn.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2,d=Math.sqrt(x*x+y*y);if(d<100){let s=(100-d)/100;btn.style.setProperty('--tx',`${x*s*0.3}px`);btn.style.setProperty('--ty',`${y*s*0.3}px`);btn.classList.add('magnetic');}});btn.addEventListener('mouseleave',()=>{btn.style.setProperty('--tx','0');btn.style.setProperty('--ty','0');btn.classList.remove('magnetic');});});
-    document.addEventListener('click',e=>{let r=document.createElement('div');r.className='ripple';r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';r.style.width='10px';r.style.height='10px';document.body.appendChild(r);setTimeout(()=>r.remove(),600);});
+    window.addEventListener('mouseleave',()=>{
+      card.style.transform=''; mouseGlow.classList.remove('active');
+      centerOffX=0; centerOffY=0;
+    });
+    (function animCursor(){
+      cX+=(mouseX-cX)*0.15; cY+=(mouseY-cY)*0.15;
+      fX+=(mouseX-fX)*0.075; fY+=(mouseY-fY)*0.075;
+      cursor.style.transform=`translate(${cX-10}px,${cY-10}px)`;
+      cursorFollower.style.transform=`translate(${fX-4}px,${fY-4}px)`;
+      requestAnimationFrame(animCursor);
+    })();
+    document.querySelectorAll('.btn,.profile-section img,h1,.music-entry-btn,.ctrl-btn,.close-btn').forEach(el=>{
+      el.addEventListener('mouseenter',()=>cursor.classList.add('expand'));
+      el.addEventListener('mouseleave',()=>cursor.classList.remove('expand'));
+    });
+    document.querySelectorAll('.btn').forEach(btn=>{
+      btn.addEventListener('mousemove',e=>{
+        let r=btn.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2,d=Math.sqrt(x*x+y*y);
+        if(d<100){let s=(100-d)/100;btn.style.setProperty('--tx',`${x*s*0.3}px`);btn.style.setProperty('--ty',`${y*s*0.3}px`);btn.classList.add('magnetic');}
+      });
+      btn.addEventListener('mouseleave',()=>{btn.style.setProperty('--tx','0');btn.style.setProperty('--ty','0');btn.classList.remove('magnetic');});
+    });
+    // Ripple click (giữ lại vì đây là CSS animation, không dùng canvas)
+    document.addEventListener('click',e=>{
+      let r=document.createElement('div'); r.className='ripple';
+      r.style.left=e.clientX+'px'; r.style.top=e.clientY+'px';
+      r.style.width='10px'; r.style.height='10px';
+      document.body.appendChild(r); setTimeout(()=>r.remove(),600);
+    });
   }
 
-  if(isMobile){document.querySelectorAll('.btn').forEach(b=>{b.addEventListener('touchstart',e=>{let r=document.createElement('div');r.className='ripple';let rect=b.getBoundingClientRect();r.style.left=(e.touches[0].clientX-rect.left)+'px';r.style.top=(e.touches[0].clientY-rect.top)+'px';r.style.width='10px';r.style.height='10px';r.style.position='absolute';b.appendChild(r);setTimeout(()=>r.remove(),600);if(navigator.vibrate)navigator.vibrate(10);});});}
+  // Ripple touch cho mobile (CSS-based, không dùng canvas)
+  if(isMobile){
+    document.querySelectorAll('.btn').forEach(b=>{
+      b.addEventListener('touchstart',e=>{
+        let r=document.createElement('div'); r.className='ripple';
+        let rect=b.getBoundingClientRect();
+        r.style.left=(e.touches[0].clientX-rect.left)+'px';
+        r.style.top=(e.touches[0].clientY-rect.top)+'px';
+        r.style.width='10px'; r.style.height='10px'; r.style.position='absolute';
+        b.appendChild(r); setTimeout(()=>r.remove(),600);
+        if(navigator.vibrate) navigator.vibrate(10);
+      });
+    });
+  }
 
-  // ==================== SOUNDCLOUD ENGINE CHO MUSIC GUI ====================
-  const gui = document.getElementById('music-gui');
+  // ==================== SOUNDCLOUD ENGINE ====================
+  const gui          = document.getElementById('music-gui');
   const guiContainer = document.getElementById('guiContainer');
-  const vinylImage = document.getElementById('vinylImage');
-  const musicStatus = document.getElementById('musicStatus');
-  const playBtnGui = document.getElementById('playBtnGui');
-  const loadBtnGui = document.getElementById('loadBtnGui');
+  const vinylImage   = document.getElementById('vinylImage');
+  const musicStatus  = document.getElementById('musicStatus');
+  const playBtnGui   = document.getElementById('playBtnGui');
+  const loadBtnGui   = document.getElementById('loadBtnGui');
   const progressFillGui = document.getElementById('progressFillGui');
-  const currentTimeGui = document.getElementById('currentTimeGui');
-  const totalTimeGui = document.getElementById('totalTimeGui');
+  const currentTimeGui  = document.getElementById('currentTimeGui');
+  const totalTimeGui    = document.getElementById('totalTimeGui');
   const volumeSliderGui = document.getElementById('volumeSliderGui');
-  const scInputGui = document.getElementById('scInputGui');
+  const scInputGui      = document.getElementById('scInputGui');
 
   let scWidget = null;
   let isPlaying = false;
   let trackDurationMs = 0;
   let allowErrorMessages = false;
 
+  // ── Timeout handle để thoát trạng thái "Loading" nếu autoplay bị chặn ──
+  let autoplayFallbackTimer = null;
+
   let currentVolume = localStorage.getItem('musicVolume');
-  if (currentVolume !== null) currentVolume = parseFloat(currentVolume);
-  else currentVolume = 0.7;
+  currentVolume = currentVolume !== null ? parseFloat(currentVolume) : 0.7;
   volumeSliderGui.value = Math.round(currentVolume * 100);
 
   function formatTime(ms) {
-    const totalSeconds = Math.floor(ms / 1000);
-    const mins = Math.floor(totalSeconds / 60);
-    const secs = totalSeconds % 60;
-    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    const s = Math.floor(ms / 1000);
+    return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
   }
 
   function updateVinylState() {
     if (isPlaying) vinylImage.classList.add('spinning');
     else vinylImage.classList.remove('spinning');
+  }
+
+  /*
+   * FIX MOBILE AUTOPLAY:
+   * Nếu sau AUTOPLAY_TIMEOUT ms kể từ khi load() mà sự kiện PLAY chưa kích hoạt
+   * (isPlaying vẫn false), ta coi như autoplay bị chặn → hiện nút PLAY thủ công.
+   */
+  const AUTOPLAY_TIMEOUT = 2800; // ms – đủ để widget SoundCloud khởi tạo xong
+
+  function startAutoplayFallback() {
+    clearAutoplayFallback();
+    autoplayFallbackTimer = setTimeout(() => {
+      if (!isPlaying) {
+        // Autoplay bị chặn: cập nhật giao diện để người dùng bấm PLAY thủ công
+        musicStatus.textContent = '✅ Đã tải – Nhấn PLAY nha!';
+        guiContainer.classList.add('is-playing'); // Hiện nút PLAY/PAUSE
+        playBtnGui.textContent = '▶ PLAY';
+        updateVinylState();
+      }
+    }, AUTOPLAY_TIMEOUT);
+  }
+
+  function clearAutoplayFallback() {
+    if (autoplayFallbackTimer) {
+      clearTimeout(autoplayFallbackTimer);
+      autoplayFallbackTimer = null;
+    }
   }
 
   function scErrorMsg(msg) {
@@ -782,39 +685,47 @@
   function initSoundCloud() {
     const iframe = document.getElementById('sc-widget');
     scWidget = SC.Widget(iframe);
-    scWidget.bind(SC.Widget.Events.READY, () => { scWidget.setVolume(currentVolume * 100); });
+
+    scWidget.bind(SC.Widget.Events.READY, () => {
+      scWidget.setVolume(currentVolume * 100);
+    });
+
     scWidget.bind(SC.Widget.Events.PLAY, () => {
+      clearAutoplayFallback(); // Autoplay thành công → hủy fallback timer
       isPlaying = true;
       playBtnGui.textContent = '⏸ PAUSE';
       musicStatus.textContent = '🎵 Đang chill';
       updateVinylState();
       guiContainer.classList.add('is-playing');
-      scWidget.getDuration((durationMs) => {
+      scWidget.getDuration(durationMs => {
         trackDurationMs = durationMs;
         totalTimeGui.textContent = formatTime(durationMs);
         currentTimeGui.textContent = '00:00';
         progressFillGui.style.width = '0%';
       });
     });
+
     scWidget.bind(SC.Widget.Events.PAUSE, () => {
       isPlaying = false;
       playBtnGui.textContent = '▶ PLAY';
       updateVinylState();
     });
-    scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, (e) => {
+
+    scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, e => {
       const currentMs = e.currentPosition;
       if (trackDurationMs <= 0 && e.duration) {
         trackDurationMs = e.duration;
         totalTimeGui.textContent = formatTime(e.duration);
       }
       if (trackDurationMs > 0) {
-        const percent = (currentMs / trackDurationMs) * 100;
-        progressFillGui.style.width = percent + '%';
+        progressFillGui.style.width = (currentMs / trackDurationMs * 100) + '%';
         currentTimeGui.textContent = formatTime(currentMs);
         totalTimeGui.textContent = formatTime(trackDurationMs);
       }
     });
+
     scWidget.bind(SC.Widget.Events.FINISH, () => {
+      clearAutoplayFallback();
       isPlaying = false;
       playBtnGui.textContent = '▶ PLAY';
       progressFillGui.style.width = '0%';
@@ -825,7 +736,9 @@
       musicStatus.textContent = '🎵 Một chút nhạc';
       guiContainer.classList.remove('is-playing');
     });
+
     scWidget.bind(SC.Widget.Events.ERROR, () => {
+      clearAutoplayFallback();
       scErrorMsg('⚠️ Không thể phát bản nhạc này từ SoundCloud');
       isPlaying = false;
       playBtnGui.textContent = '▶ PLAY';
@@ -846,10 +759,12 @@
       script.onload = initSoundCloud;
       script.onerror = () => scErrorMsg('⚠️ Đang lỗi');
       document.body.appendChild(script);
-    } else initSoundCloud();
+    } else {
+      initSoundCloud();
+    }
   }
 
-  // GUI mở/đóng
+  // ── GUI mở / đóng ──
   document.getElementById('musicModeBtn').addEventListener('click', () => {
     gui.classList.add('active');
     gui.classList.remove('fade-out');
@@ -860,8 +775,10 @@
       guiContainer.classList.add('is-playing');
     } else {
       playBtnGui.textContent = '▶ PLAY';
-      musicStatus.textContent = '🎵 Một chút nhạc';
-      guiContainer.classList.remove('is-playing');
+      // Nếu đang ở trạng thái " Nhấn PLAY để nghe nhé " thì giữ nguyên status đó
+      if (!guiContainer.classList.contains('is-playing')) {
+        musicStatus.textContent = '🎵 Một chút nhạc';
+      }
     }
   });
 
@@ -881,11 +798,14 @@
   });
   observer.observe(gui, { attributes: true, attributeFilter: ['class'] });
 
+  // ── Nút LOAD ──
   loadBtnGui.addEventListener('click', () => {
     allowErrorMessages = true;
     let rawUrl = scInputGui.value.trim();
     if (!rawUrl) return;
-    if (!rawUrl.includes('soundcloud.com')) { showMsg('⚠️ Kiểm tra lại link đúng chưa đóa '); return; }
+    if (!rawUrl.includes('soundcloud.com')) {
+      showMsg('⚠️ Kiểm tra lại link đúng chưa đóa'); return;
+    }
     const cleanUrl = rawUrl.split('?')[0];
     if (scWidget) {
       musicStatus.textContent = '⌛ Đang Mở, Chờ tí nà...';
@@ -893,17 +813,25 @@
       progressFillGui.style.width = '0%';
       currentTimeGui.textContent = '00:00';
       totalTimeGui.textContent = '00:00';
+      isPlaying = false;
+      updateVinylState();
       guiContainer.classList.remove('is-playing');
       scWidget.load(cleanUrl, { auto_play: true });
-    } else showMsg('⚠️ Đợi xí, Đang cài SoundCloud zô !!');
+      // Khởi động bộ đếm: nếu autoplay bị chặn → hiện PLAY thủ công
+      startAutoplayFallback();
+    } else {
+      showMsg('⚠️ Đợi xí, Đang cài SoundCloud zô !!');
+    }
   });
 
+  // ── Nút PLAY/PAUSE ──
   playBtnGui.addEventListener('click', () => {
     if (!scWidget) { showMsg('⚠️ Thử LOAD một link trước xem'); return; }
     if (isPlaying) scWidget.pause();
     else scWidget.play();
   });
 
+  // ── Volume ──
   volumeSliderGui.addEventListener('input', () => {
     currentVolume = parseFloat(volumeSliderGui.value) / 100;
     localStorage.setItem('musicVolume', currentVolume);
