@@ -223,77 +223,282 @@
       50% { transform: translateY(-10px); }
     }
 
-    /* ========== MUSIC PLAYER ========== */
-    .music-player {
-      position: fixed; top: 20px; right: 20px; z-index: 100;
-      display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+    /* ========== LỐI VÀO MUSIC MODE ========== */
+    .music-entry {
+      position: fixed;
+      top: 25px;
+      left: 25px;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
     }
-    .music-row {
-      display: flex; align-items: center; gap: 10px;
+    .music-entry-text {
+      font-size: 12px;
+      font-weight: 500;
+      color: #e9d5ff;
+      text-shadow: 0 0 8px var(--accent-color);
+      letter-spacing: 0.5px;
+    }
+    .music-entry-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(20, 20, 50, 0.5);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(192,132,252,0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: #c084fc;
+      cursor: pointer;
+      box-shadow: 0 0 15px #c084fc;
+      transition: box-shadow 0.3s, transform 0.2s;
+    }
+    .music-entry-btn:hover {
+      box-shadow: 0 0 30px #c084fc;
+      transform: scale(1.1);
     }
 
-    .track-info {
-      font-size: 12px; font-weight: 500; color: #e9d5ff;
-      text-shadow: 0 0 8px var(--accent-color); letter-spacing: 0.5px;
-      white-space: nowrap; pointer-events: none;
+    /* ========== MUSIC GUI FULLSCREEN ========== */
+    #music-gui {
+      position: fixed;
+      inset: 0;
+      z-index: 9990;
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    #music-gui.active {
+      display: flex;
+      opacity: 1;
+    }
+    #music-gui.fade-out {
+      opacity: 0;
     }
 
-    .music-btn {
-      position: relative; background: rgba(20, 20, 50, 0.5);
-      border: 1px solid rgba(255,255,255,0.1); color: white;
-      border-radius: 12px; font-size: 13px; font-weight: 700;
-      padding: 8px 18px; cursor: pointer;
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      letter-spacing: 1.5px; transition: all 0.3s ease; overflow: hidden;
-      text-align: center; outline: none;
+    .gui-container {
+      position: relative;
+      z-index: 2;
+      width: 90%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      padding: 30px 20px;
+      background: rgba(20, 10, 40, 0.5);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(192,132,252,0.4);
+      border-radius: 40px;
+      box-shadow: 0 0 40px rgba(168,85,247,0.2);
+      transform: scale(0.9);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      cursor: default;
     }
-    .music-btn:hover {
+    #music-gui.active .gui-container {
+      transform: scale(1);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: var(--accent-color);
+      font-size: 28px;
+      cursor: pointer;
+      z-index: 10;
+      text-shadow: 0 0 15px var(--accent-color);
+      transition: transform 0.2s;
+    }
+    .close-btn:hover {
+      transform: scale(1.2);
+    }
+
+    .vinyl-wrapper {
+      position: relative;
+      width: 200px;
+      height: 200px;
+    }
+    .vinyl-image {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 0 30px rgba(168,85,247,0.5);
+      transition: box-shadow 0.3s;
+    }
+    .vinyl-image.spinning {
+      animation: spin 2s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .neon-ring {
+      position: absolute;
+      top: -15px;
+      left: -15px;
+      width: calc(100% + 30px);
+      height: calc(100% + 30px);
+      border-radius: 50%;
+      border: 2px solid rgba(192,132,252,0.5);
+      box-shadow: 0 0 25px rgba(192,132,252,0.4), inset 0 0 15px rgba(192,132,252,0.2);
+      z-index: 0;
+      pointer-events: none;
+      animation: neonPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes neonPulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(192,132,252,0.3); border-color: rgba(192,132,252,0.5); }
+      50% { box-shadow: 0 0 50px rgba(168,85,247,0.8); border-color: rgba(192,132,252,0.9); }
+    }
+
+    .music-status {
+      font-size: 18px;
+      font-weight: 600;
+      color: #e9d5ff;
+      text-shadow: 0 0 20px var(--accent-color);
+      letter-spacing: 2px;
+    }
+
+    /* ========== CONTROL PANEL – căn giữa hoàn toàn ========== */
+    .control-panel {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      margin-top: 10px;
+      /* ĐÃ XÓA: transform: translateX(-8px) – đây là nguồn gốc lệch trục */
+    }
+
+    .sc-input {
+      width: 100%;
+      background: rgba(20, 20, 50, 0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 10px 15px;
+      color: white;
+      font-size: 12px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      outline: none;
+      text-align: center;
+    }
+    .sc-input::placeholder {
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ── Wrapper chứa 2 nút: dùng relative + chiều cao cố định ── */
+    .control-buttons {
+      position: relative;
+      width: 100%;
+      height: 44px; /* khớp với padding + font của .ctrl-btn */
+    }
+
+    /* ── Nút chung: absolute, dịch từ tâm 50% ── */
+    .ctrl-btn {
+      position: absolute;
+      top: 0;
+      /* left được ghi đè ở từng nút */
+      width: 110px;                /* kích thước đồng nhất */
+      background: rgba(20, 20, 50, 0.5);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      border-radius: 25px;
+      padding: 10px 0;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      text-align: center;
+      transition: border-color 0.3s, box-shadow 0.3s,
+                  transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.6s ease;
+    }
+    .ctrl-btn:hover {
       border-color: var(--accent-color);
-      box-shadow: inset 0 0 20px rgba(168,85,247,0.2), 0 0 25px rgba(168,85,247,0.3);
+      box-shadow: 0 0 20px rgba(168,85,247,0.4);
     }
-    .music-btn .bracket-tl, .music-btn .bracket-br { width: 10px; height: 10px; }
-    .music-btn .bracket-tl { top: 5px; left: 5px; }
-    .music-btn .bracket-br { bottom: 5px; right: 5px; }
-    .music-btn .led { width: 3px; height: 3px; top: 6px; right: 6px; }
-    .music-btn .serial { font-size: 7px; bottom: 4px; left: 10px; }
-    .music-btn .sheen { top: -150%; left: -150%; }
 
-    .progress-section {
-      width: 220px; display: flex; flex-direction: column; gap: 4px;
+    /* ── Nút LOAD ── */
+    /* Mặc định: nằm chính giữa (translateX(-50%) → tâm nút = tâm container) */
+    #loadBtnGui {
+      left: 50%;
+      transform: translateX(-50%);
     }
-    .progress-bar-bg {
-      width: 100%; height: 4px; background: rgba(255,255,255,0.1);
-      border-radius: 2px; overflow: hidden;
+    /* Khi playing: trượt sang trái 65px tính từ tâm */
+    .gui-container.is-playing #loadBtnGui {
+      transform: translateX(calc(-50% - 65px));
     }
-    .progress-bar-fill {
-      height: 100%; width: 0%;
+
+    /* ── Nút PLAY/PAUSE ── */
+    /* Mặc định: ẩn, nằm ở vị trí bên phải nhưng hơi thấp hơn để tạo hiệu ứng trượt lên */
+    #playBtnGui {
+      left: 50%;
+      transform: translateX(calc(-50% + 65px)) translateY(14px);
+      opacity: 0;
+      pointer-events: none;
+    }
+    /* Khi playing: hiện ra, đối xứng với LOAD (cách tâm 65px về bên phải) */
+    .gui-container.is-playing #playBtnGui {
+      transform: translateX(calc(-50% + 65px)) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* ── Thanh tiến trình ── */
+    .progress-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0%;
       background: linear-gradient(90deg, #a855f7, #c084fc);
-      box-shadow: 0 0 10px #a855f7; border-radius: 2px;
+      box-shadow: 0 0 10px #a855f7;
+      border-radius: 2px;
       transition: width 0.1s linear;
     }
-    .time-display {
-      font-size: 10px; font-weight: 500; color: #c084fc;
-      text-shadow: 0 0 6px var(--accent-color); letter-spacing: 1px;
-      display: flex; justify-content: space-between;
+    .time-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #c084fc;
+      text-shadow: 0 0 6px var(--accent-color);
     }
-    #visualizer {
-      border-radius: 8px; background: rgba(10,10,30,0.5);
-      border: 1px solid rgba(255,255,255,0.1);
-      pointer-events: none; width: 80px; height: 30px;
-    }
-
-    .volume-section {
-      width: 220px;
+    .volume-row {
+      width: 100%;
       display: flex;
       align-items: center;
       gap: 8px;
+      margin-top: 5px;
     }
     .volume-label {
       font-size: 10px;
-      font-weight: 500;
       color: var(--accent-color);
       text-shadow: 0 0 6px var(--accent-color);
-      letter-spacing: 1px;
       white-space: nowrap;
     }
     .volume-slider {
@@ -308,28 +513,28 @@
     }
     .volume-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 12px; height: 12px;
+      width: 14px; height: 14px;
       border-radius: 50%;
       background: #c084fc;
       box-shadow: 0 0 10px #a855f7;
     }
-    .volume-slider::-moz-range-thumb {
-      width: 12px; height: 12px;
-      border-radius: 50%;
-      background: #c084fc;
-      box-shadow: 0 0 10px #a855f7;
-      border: none;
+
+    #sc-widget {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      width: 300px;
+      height: 200px;
+      pointer-events: none;
     }
 
     @media (max-width: 768px) {
       body { cursor: auto; }
       .cursor, .cursor-follower { display: none; }
       #aura-canvas { display: none !important; }
-      .music-player { top: 10px; right: 10px; }
-      .track-info { font-size: 10px; }
-      .music-btn { font-size: 11px; padding: 6px 14px; }
-      .progress-section, .volume-section { width: 160px; }
-      #visualizer { width: 60px; height: 24px; }
+      .music-entry { top: 15px; left: 15px; }
+      .music-entry-text { font-size: 10px; }
+      .music-entry-btn { width: 42px; height: 42px; font-size: 18px; }
     }
   </style>
 </head>
@@ -346,38 +551,38 @@
 <div class="cursor" id="cursor"></div>
 <div class="cursor-follower" id="cursorFollower"></div>
 
-<div class="music-player" id="musicPlayer">
-  <div class="music-row">
-    <span class="track-info" id="trackInfo">🎵 Đang chill cùng: ...</span>
-    <button class="music-btn" id="playPauseBtn">
-      <span class="bracket-tl"></span>
-      <span class="bracket-br"></span>
-      <span class="led"></span>
-      <span class="btn-text">PLAY</span>
-      <span class="sheen"></span>
-    </button>
-    <button class="music-btn" id="skipBtn">
-      <span class="bracket-tl"></span>
-      <span class="bracket-br"></span>
-      <span class="led"></span>
-      <span class="btn-text">SKIP</span>
-      <span class="sheen"></span>
-    </button>
-  </div>
-  <div class="progress-section">
-    <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="progressFill"></div>
-    </div>
-    <div class="time-display" id="timeDisplay">
-      <span id="currentTime">00:00</span> / <span id="totalTime">00:00</span>
-    </div>
-  </div>
-  <div class="volume-section">
-    <span class="volume-label">VOLUME</span>
-    <input type="range" id="volumeSlider" min="0" max="100" value="70" class="volume-slider">
-  </div>
-  <canvas id="visualizer" width="80" height="30"></canvas>
+<div class="music-entry">
+  <span class="music-entry-text"> 🎵 Muốn nghe tí nhạc không? 🎵 </span>
+  <button class="music-entry-btn" id="musicModeBtn">🎵</button>
 </div>
+
+<div id="music-gui">
+  <div class="gui-container" id="guiContainer">
+    <button class="close-btn" id="closeGuiBtn">✕</button>
+    <div class="vinyl-wrapper">
+      <img src="dianhac.png" alt="Đĩa nhạc" class="vinyl-image" id="vinylImage">
+      <div class="neon-ring" id="neonRing"></div>
+    </div>
+    <div class="music-status" id="musicStatus">🎵 Một chút nhạc</div>
+    <div class="control-panel">
+      <input type="text" id="scInputGui" class="sc-input" placeholder="Dán link SoundCloud...">
+      <div class="control-buttons">
+        <button class="ctrl-btn" id="loadBtnGui">LOAD</button>
+        <button class="ctrl-btn" id="playBtnGui">▶ PLAY</button>
+      </div>
+      <div class="progress-container">
+        <div class="progress-bar"><div class="progress-fill" id="progressFillGui"></div></div>
+        <div class="time-row"><span id="currentTimeGui">00:00</span> / <span id="totalTimeGui">00:00</span></div>
+      </div>
+      <div class="volume-row">
+        <span class="volume-label">VOL</span>
+        <input type="range" id="volumeSliderGui" class="volume-slider" min="0" max="100" value="70">
+      </div>
+    </div>
+  </div>
+</div>
+
+<iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/123456789" allow="autoplay"></iframe>
 
 <div class="container" id="main-card">
   <div class="profile-section">
@@ -391,9 +596,7 @@
 
 <script>
   // ==================== FIX LỖI NHẢY VỊ TRÍ KHI F5 ====================
-  if (history.scrollRestoration) {
-    history.scrollRestoration = 'manual';
-  }
+  if (history.scrollRestoration) history.scrollRestoration = 'manual';
   window.scrollTo(0, 0);
 
   // ==================== DỮ LIỆU MÔN HỌC (GIỮ NGUYÊN 100%) ====================
@@ -413,10 +616,7 @@
   SUBJECT_DATA.forEach((sub, i) => {
     const a = document.createElement('a');
     a.href = sub.link; a.className = 'btn'; a.target = '_blank'; a.rel = 'noopener noreferrer';
-    a.innerHTML = `
-      <span class="bracket-tl"></span><span class="bracket-br"></span>
-      <span class="led"></span><span class="serial">[ SEC-${String(i+1).padStart(2, '0')} ]</span>
-      <span class="btn-text">${sub.name}</span><span class="sheen"></span>`;
+    a.innerHTML = `<span class="bracket-tl"></span><span class="bracket-br"></span><span class="led"></span><span class="serial">[ SEC-${String(i+1).padStart(2, '0')} ]</span><span class="btn-text">${sub.name}</span><span class="sheen"></span>`;
     listContainer.appendChild(a);
   });
 
@@ -533,350 +733,184 @@
     });
     window.addEventListener('mouseleave',()=>{card.style.transform='';mouseGlow.classList.remove('active');mouseOn=false;centerOffX=0;centerOffY=0;});
     (function animCursor(){cX+=(mouseX-cX)*0.15;cY+=(mouseY-cY)*0.15;fX+=(mouseX-fX)*0.075;fY+=(mouseY-fY)*0.075;cursor.style.transform=`translate(${cX-10}px,${cY-10}px)`;cursorFollower.style.transform=`translate(${fX-4}px,${fY-4}px)`;requestAnimationFrame(animCursor);})();
-    document.querySelectorAll('.btn,.profile-section img,h1,.music-btn,.volume-slider').forEach(el=>{el.addEventListener('mouseenter',()=>cursor.classList.add('expand'));el.addEventListener('mouseleave',()=>cursor.classList.remove('expand'));});
-    document.querySelectorAll('.btn,.music-btn').forEach(btn=>{btn.addEventListener('mousemove',e=>{let r=btn.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2,d=Math.sqrt(x*x+y*y);if(d<100){let s=(100-d)/100;btn.style.setProperty('--tx',`${x*s*0.3}px`);btn.style.setProperty('--ty',`${y*s*0.3}px`);btn.classList.add('magnetic');}});btn.addEventListener('mouseleave',()=>{btn.style.setProperty('--tx','0');btn.style.setProperty('--ty','0');btn.classList.remove('magnetic');});});
+    document.querySelectorAll('.btn,.profile-section img,h1,.music-entry-btn,.ctrl-btn,.close-btn').forEach(el=>{el.addEventListener('mouseenter',()=>cursor.classList.add('expand'));el.addEventListener('mouseleave',()=>cursor.classList.remove('expand'));});
+    document.querySelectorAll('.btn').forEach(btn=>{btn.addEventListener('mousemove',e=>{let r=btn.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2,d=Math.sqrt(x*x+y*y);if(d<100){let s=(100-d)/100;btn.style.setProperty('--tx',`${x*s*0.3}px`);btn.style.setProperty('--ty',`${y*s*0.3}px`);btn.classList.add('magnetic');}});btn.addEventListener('mouseleave',()=>{btn.style.setProperty('--tx','0');btn.style.setProperty('--ty','0');btn.classList.remove('magnetic');});});
     document.addEventListener('click',e=>{let r=document.createElement('div');r.className='ripple';r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';r.style.width='10px';r.style.height='10px';document.body.appendChild(r);setTimeout(()=>r.remove(),600);});
   }
 
-  // ========== MOBILE EXTRA ==========
-  if(isMobile){document.querySelectorAll('.btn,.music-btn').forEach(b=>{b.addEventListener('touchstart',e=>{let r=document.createElement('div');r.className='ripple';let rect=b.getBoundingClientRect();r.style.left=(e.touches[0].clientX-rect.left)+'px';r.style.top=(e.touches[0].clientY-rect.top)+'px';r.style.width='10px';r.style.height='10px';r.style.position='absolute';b.appendChild(r);setTimeout(()=>r.remove(),600);if(navigator.vibrate)navigator.vibrate(10);});});}
+  if(isMobile){document.querySelectorAll('.btn').forEach(b=>{b.addEventListener('touchstart',e=>{let r=document.createElement('div');r.className='ripple';let rect=b.getBoundingClientRect();r.style.left=(e.touches[0].clientX-rect.left)+'px';r.style.top=(e.touches[0].clientY-rect.top)+'px';r.style.width='10px';r.style.height='10px';r.style.position='absolute';b.appendChild(r);setTimeout(()=>r.remove(),600);if(navigator.vibrate)navigator.vibrate(10);});});}
 
-  // ==================== MUSIC ENGINE (TINH CHỈNH + FIX LỖI NHẢY) ====================
-  const playPauseBtn = document.getElementById('playPauseBtn');
-  const playPauseBtnText = playPauseBtn.querySelector('.btn-text');
-  const skipBtn = document.getElementById('skipBtn');
-  const trackInfo = document.getElementById('trackInfo');
-  const progressFill = document.getElementById('progressFill');
-  const currentTimeEl = document.getElementById('currentTime');
-  const totalTimeEl = document.getElementById('totalTime');
-  const visualizerCanvas = document.getElementById('visualizer');
-  const visualCtx = visualizerCanvas.getContext('2d');
-  const volumeSlider = document.getElementById('volumeSlider');
+  // ==================== SOUNDCLOUD ENGINE CHO MUSIC GUI ====================
+  const gui = document.getElementById('music-gui');
+  const guiContainer = document.getElementById('guiContainer');
+  const vinylImage = document.getElementById('vinylImage');
+  const musicStatus = document.getElementById('musicStatus');
+  const playBtnGui = document.getElementById('playBtnGui');
+  const loadBtnGui = document.getElementById('loadBtnGui');
+  const progressFillGui = document.getElementById('progressFillGui');
+  const currentTimeGui = document.getElementById('currentTimeGui');
+  const totalTimeGui = document.getElementById('totalTimeGui');
+  const volumeSliderGui = document.getElementById('volumeSliderGui');
+  const scInputGui = document.getElementById('scInputGui');
 
-  // Danh sách nhạc của bạn (GIỮ NGUYÊN 100%)
-  const musicList = [
-    { url: "https://files.catbox.moe/g4ry06.mp3", title: "Justin Bieber - Beauty And A Beat" },
-    { url: "https://files.catbox.moe/p1nny3.mp3", title: "Justin Bieber - Baby ft. Ludacris" },
-    { url: "https://files.catbox.moe/dnxeoe.mp3", title: "Stay  The Kid LAROI feat. Justin Bieber" },
-    { url: "https://files.catbox.moe/ose985.mp3", title: "The Weeknd, JENNIE, Lily-Rose Depp - One Of The Girls" },
-    { url: "https://files.catbox.moe/c6rov8.mp3", title: "Glass Animals - Heat Waves" },
-    { url: "https://files.catbox.moe/pmf1o4.mp3", title: "Camila Cabello - Havana" },
-    { url: "https://files.catbox.moe/o1dkwv.mp3", title: "Sean Kingston - Beautiful Girls" },
-    { url: "https://files.catbox.moe/p2z689.mp3", title: "Sean Kingston - Eenie Meenie" },
-    { url: "https://files.catbox.moe/vm2dya.mp3", title: "Justin Bieber - Love Yourself" },
-    { url: "https://files.catbox.moe/6vkp4w.mp3", title: "Lady Gaga, Bruno Mars - Die With A Smile" }
-  ];
-
-  let audio = null;
-  let audioCtx = null;
-  let analyser = null;
-  let source = null;
-  let currentTrackIndex = -1;
+  let scWidget = null;
   let isPlaying = false;
-  let progressAnimId = null;
-  let visAnimId = null;
+  let trackDurationMs = 0;
+  let allowErrorMessages = false;
 
-  // Âm lượng: đọc từ localStorage, mặc định 0.7
   let currentVolume = localStorage.getItem('musicVolume');
-  if (currentVolume !== null) {
-    currentVolume = parseFloat(currentVolume);
-  } else {
-    currentVolume = 0.7;
-  }
-  volumeSlider.value = Math.round(currentVolume * 100);
+  if (currentVolume !== null) currentVolume = parseFloat(currentVolume);
+  else currentVolume = 0.7;
+  volumeSliderGui.value = Math.round(currentVolume * 100);
 
-  function formatTime(seconds) {
-    if (isNaN(seconds) || !isFinite(seconds)) return '00:00';
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
+  function formatTime(ms) {
+    const totalSeconds = Math.floor(ms / 1000);
+    const mins = Math.floor(totalSeconds / 60);
+    const secs = totalSeconds % 60;
     return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
   }
 
-  function stopAnimationFrames() {
-    if (progressAnimId) {
-      cancelAnimationFrame(progressAnimId);
-      progressAnimId = null;
-    }
-    if (visAnimId) {
-      cancelAnimationFrame(visAnimId);
-      visAnimId = null;
-    }
+  function updateVinylState() {
+    if (isPlaying) vinylImage.classList.add('spinning');
+    else vinylImage.classList.remove('spinning');
   }
 
-  function updateProgress() {
-    if (!audio || !isPlaying) return;
-    const current = audio.currentTime;
-    const duration = audio.duration;
-    if (duration && !isNaN(duration)) {
-      const percent = (current / duration) * 100;
-      progressFill.style.width = percent + '%';
-      currentTimeEl.textContent = formatTime(current);
-      totalTimeEl.textContent = formatTime(duration);
-    } else {
-      currentTimeEl.textContent = formatTime(current);
-      totalTimeEl.textContent = '--:--';
-    }
-
-    if (isPlaying) {
-      progressAnimId = requestAnimationFrame(updateProgress);
-    }
+  function scErrorMsg(msg) {
+    if (allowErrorMessages) showMsg(msg);
   }
 
-  function drawVisualizer() {
-    if (!isPlaying || !analyser) {
-      visualCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
-      visAnimId = requestAnimationFrame(drawVisualizer);
-      return;
-    }
-    const W = visualizerCanvas.width;
-    const H = visualizerCanvas.height;
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-    analyser.getByteFrequencyData(dataArray);
-
-    const vol = audio ? audio.volume : 1;
-
-    visualCtx.clearRect(0, 0, W, H);
-    const barWidth = (W / bufferLength) * 2.5;
-    let x = 0;
-    for (let i = 0; i < bufferLength; i++) {
-      const barHeight = (dataArray[i] / 255) * H * vol;
-      const gradient = visualCtx.createLinearGradient(0, H, 0, H - barHeight);
-      gradient.addColorStop(0, '#a855f7');
-      gradient.addColorStop(1, '#c084fc');
-      visualCtx.fillStyle = gradient;
-      visualCtx.shadowBlur = 3;
-      visualCtx.shadowColor = '#c084fc';
-      visualCtx.fillRect(x, H - barHeight, barWidth, barHeight);
-      x += barWidth + 1;
-      if (x > W) break;
-    }
-    visAnimId = requestAnimationFrame(drawVisualizer);
-  }
-
-  function unloadCurrentTrack() {
-    if (audio) {
-      audio.pause();
-      audio.removeEventListener('ended', onTrackEnded);
-      audio = null;
-    }
-    if (source) {
-      source.disconnect();
-      source = null;
-    }
-  }
-
-  function onTrackEnded() {
-    playRandomTrack();
-  }
-
-  // Kiểm tra link mp3 có sống không
-  function checkUrl(url) {
-    return new Promise((resolve) => {
-      if (!url) { resolve(false); return; }
-      const testAudio = new Audio();
-      testAudio.crossOrigin = "anonymous";
-      testAudio.preload = "auto";
-      let resolved = false;
-      const handleSuccess = () => {
-        if (!resolved) {
-          resolved = true;
-          cleanup();
-          resolve(true);
-        }
-      };
-      const handleError = () => {
-        if (!resolved) {
-          resolved = true;
-          cleanup();
-          resolve(false);
-        }
-      };
-      const cleanup = () => {
-        testAudio.removeEventListener('canplay', handleSuccess);
-        testAudio.removeEventListener('error', handleError);
-        testAudio.src = '';
-        testAudio.load();
-      };
-      testAudio.addEventListener('canplay', handleSuccess);
-      testAudio.addEventListener('error', handleError);
-      setTimeout(() => {
-        if (!resolved) {
-          resolved = true;
-          cleanup();
-          resolve(false);
-        }
-      }, 5000);
-      testAudio.src = url;
+  function initSoundCloud() {
+    const iframe = document.getElementById('sc-widget');
+    scWidget = SC.Widget(iframe);
+    scWidget.bind(SC.Widget.Events.READY, () => { scWidget.setVolume(currentVolume * 100); });
+    scWidget.bind(SC.Widget.Events.PLAY, () => {
+      isPlaying = true;
+      playBtnGui.textContent = '⏸ PAUSE';
+      musicStatus.textContent = '🎵 Đang chill';
+      updateVinylState();
+      guiContainer.classList.add('is-playing');
+      scWidget.getDuration((durationMs) => {
+        trackDurationMs = durationMs;
+        totalTimeGui.textContent = formatTime(durationMs);
+        currentTimeGui.textContent = '00:00';
+        progressFillGui.style.width = '0%';
+      });
+    });
+    scWidget.bind(SC.Widget.Events.PAUSE, () => {
+      isPlaying = false;
+      playBtnGui.textContent = '▶ PLAY';
+      updateVinylState();
+    });
+    scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, (e) => {
+      const currentMs = e.currentPosition;
+      if (trackDurationMs <= 0 && e.duration) {
+        trackDurationMs = e.duration;
+        totalTimeGui.textContent = formatTime(e.duration);
+      }
+      if (trackDurationMs > 0) {
+        const percent = (currentMs / trackDurationMs) * 100;
+        progressFillGui.style.width = percent + '%';
+        currentTimeGui.textContent = formatTime(currentMs);
+        totalTimeGui.textContent = formatTime(trackDurationMs);
+      }
+    });
+    scWidget.bind(SC.Widget.Events.FINISH, () => {
+      isPlaying = false;
+      playBtnGui.textContent = '▶ PLAY';
+      progressFillGui.style.width = '0%';
+      currentTimeGui.textContent = '00:00';
+      totalTimeGui.textContent = '00:00';
+      trackDurationMs = 0;
+      updateVinylState();
+      musicStatus.textContent = '🎵 Một chút nhạc';
+      guiContainer.classList.remove('is-playing');
+    });
+    scWidget.bind(SC.Widget.Events.ERROR, () => {
+      scErrorMsg('⚠️ Không thể phát bản nhạc này từ SoundCloud');
+      isPlaying = false;
+      playBtnGui.textContent = '▶ PLAY';
+      progressFillGui.style.width = '0%';
+      currentTimeGui.textContent = '00:00';
+      totalTimeGui.textContent = '00:00';
+      trackDurationMs = 0;
+      updateVinylState();
+      musicStatus.textContent = '🎵 Một chút nhạc';
+      guiContainer.classList.remove('is-playing');
     });
   }
 
-  async function playTrack(index) {
-    if (index < 0 || index >= musicList.length) return false;
-
-    unloadCurrentTrack();
-
-    if (!audioCtx) {
-      try {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      } catch (e) {
-        console.error('AudioContext not supported');
-        return false;
-      }
-    }
-    if (audioCtx.state === 'suspended') {
-      await audioCtx.resume();
-    }
-
-    if (!analyser) {
-      analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 64;
-    }
-
-    audio = new Audio();
-    audio.crossOrigin = "anonymous";
-    audio.src = musicList[index].url;
-    audio.volume = currentVolume;
-
-    source = audioCtx.createMediaElementSource(audio);
-    source.connect(analyser);
-    analyser.connect(audioCtx.destination);
-
-    audio.addEventListener('ended', onTrackEnded);
-
-    try {
-      await audio.play();
-      currentTrackIndex = index;
-      isPlaying = true;
-      trackInfo.textContent = `🎵 Đang chill cùng: ${musicList[index].title}`;
-      playPauseBtnText.textContent = 'PAUSE';
-      progressFill.style.width = '0%';
-      currentTimeEl.textContent = '00:00';
-      totalTimeEl.textContent = formatTime(audio.duration || 0);
-      stopAnimationFrames();
-      updateProgress();
-      drawVisualizer();
-      return true;
-    } catch (err) {
-      console.error('Playback failed:', err);
-      unloadCurrentTrack();
-      isPlaying = false;
-      playPauseBtnText.textContent = 'PLAY';
-      trackInfo.textContent = '🎵 Đang chill cùng: ...';
-      return false;
-    }
+  function loadSoundCloudAPI() {
+    if (!document.querySelector('script[src="https://w.soundcloud.com/player/api.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://w.soundcloud.com/player/api.js';
+      script.onload = initSoundCloud;
+      script.onerror = () => scErrorMsg('⚠️ Đang lỗi');
+      document.body.appendChild(script);
+    } else initSoundCloud();
   }
 
-  async function playRandomTrack() {
-    const total = musicList.length;
-    if (total === 0) return;
-
-    // Hiển thị trạng thái chờ
-    trackInfo.textContent = '🎵 Chờ tí nhé...';
-
-    let indices = [];
-    for (let i = 0; i < total; i++) {
-      if (i !== currentTrackIndex) indices.push(i);
-    }
-    if (indices.length === 0) {
-      indices = [0];
-    }
-
-    for (let i = indices.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [indices[i], indices[j]] = [indices[j], indices[i]];
-    }
-
-    for (const idx of indices) {
-      const url = musicList[idx].url;
-      if (!url) continue;
-      const valid = await checkUrl(url);
-      if (valid) {
-        const success = await playTrack(idx);
-        if (success) return;
-      }
-    }
-
-    // Không có link nào sống
-    showMsg('🎵 No playable music found');
-    trackInfo.textContent = '🎵 Đang chill cùng: ...';
-    playPauseBtnText.textContent = 'PLAY';
-    progressFill.style.width = '0%';
-    currentTimeEl.textContent = '00:00';
-    totalTimeEl.textContent = '00:00';
-    stopAnimationFrames();
-    visualCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
-  }
-
-  function togglePlayPause() {
-    if (!audio) {
-      playRandomTrack();
-      return;
-    }
-
+  // GUI mở/đóng
+  document.getElementById('musicModeBtn').addEventListener('click', () => {
+    gui.classList.add('active');
+    gui.classList.remove('fade-out');
+    updateVinylState();
     if (isPlaying) {
-      audio.pause();
-      isPlaying = false;
-      playPauseBtnText.textContent = 'PLAY';
-      stopAnimationFrames();
+      playBtnGui.textContent = '⏸ PAUSE';
+      musicStatus.textContent = '🎵 Đang chill';
+      guiContainer.classList.add('is-playing');
     } else {
-      if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume();
+      playBtnGui.textContent = '▶ PLAY';
+      musicStatus.textContent = '🎵 Một chút nhạc';
+      guiContainer.classList.remove('is-playing');
+    }
+  });
+
+  document.getElementById('closeGuiBtn').addEventListener('click', () => {
+    gui.classList.add('fade-out');
+    gui.classList.remove('active');
+    setTimeout(() => {
+      if (gui.classList.contains('fade-out') && !gui.classList.contains('active')) {
+        gui.style.display = 'none';
       }
-      audio.play().then(() => {
-        isPlaying = true;
-        playPauseBtnText.textContent = 'PAUSE';
-        stopAnimationFrames();
-        updateProgress();
-        drawVisualizer();
-      }).catch(err => {
-        console.error('Resume failed:', err);
-        isPlaying = false;
-        playPauseBtnText.textContent = 'PLAY';
-      });
-    }
-  }
-
-  function skipTrack() {
-    unloadCurrentTrack();
-    isPlaying = false;
-    stopAnimationFrames();
-    playPauseBtnText.textContent = 'PLAY';
-    progressFill.style.width = '0%';
-    currentTimeEl.textContent = '00:00';
-    totalTimeEl.textContent = '00:00';
-    visualCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
-
-    playRandomTrack();
-  }
-
-  playPauseBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    togglePlayPause();
-  });
-  playPauseBtn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    togglePlayPause();
+    }, 400);
   });
 
-  skipBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    skipTrack();
+  const observer = new MutationObserver(() => {
+    if (gui.classList.contains('active')) gui.style.display = 'flex';
+    else if (!gui.classList.contains('fade-out')) gui.style.display = 'none';
   });
-  skipBtn.addEventListener('touchstart', (e) => {
-    e.preventDefault();
-    skipTrack();
+  observer.observe(gui, { attributes: true, attributeFilter: ['class'] });
+
+  loadBtnGui.addEventListener('click', () => {
+    allowErrorMessages = true;
+    let rawUrl = scInputGui.value.trim();
+    if (!rawUrl) return;
+    if (!rawUrl.includes('soundcloud.com')) { showMsg('⚠️ Kiểm tra lại link đúng chưa đóa '); return; }
+    const cleanUrl = rawUrl.split('?')[0];
+    if (scWidget) {
+      musicStatus.textContent = '⌛ Đang Mở, Chờ tí nà...';
+      trackDurationMs = 0;
+      progressFillGui.style.width = '0%';
+      currentTimeGui.textContent = '00:00';
+      totalTimeGui.textContent = '00:00';
+      guiContainer.classList.remove('is-playing');
+      scWidget.load(cleanUrl, { auto_play: true });
+    } else showMsg('⚠️ Đợi xí, Đang cài SoundCloud zô !!');
   });
 
-  volumeSlider.addEventListener('input', () => {
-    currentVolume = parseFloat(volumeSlider.value) / 100;
+  playBtnGui.addEventListener('click', () => {
+    if (!scWidget) { showMsg('⚠️ Thử LOAD một link trước xem'); return; }
+    if (isPlaying) scWidget.pause();
+    else scWidget.play();
+  });
+
+  volumeSliderGui.addEventListener('input', () => {
+    currentVolume = parseFloat(volumeSliderGui.value) / 100;
     localStorage.setItem('musicVolume', currentVolume);
-    if (audio) {
-      audio.volume = currentVolume;
-    }
+    if (scWidget) scWidget.setVolume(Math.round(currentVolume * 100));
   });
 
-  drawVisualizer();
+  loadSoundCloudAPI();
 </script>
 </body>
 </html>
