@@ -663,7 +663,7 @@
     autoplayFallbackTimer = setTimeout(() => {
       if (!isPlaying) {
         // Autoplay bị chặn: cập nhật giao diện để người dùng bấm PLAY thủ công
-        musicStatus.textContent = '✅ Đã tải – Nhấn PLAY nha!';
+        musicStatus.textContent = ' Nhấn PLAY để nghe nà ';
         guiContainer.classList.add('is-playing'); // Hiện nút PLAY/PAUSE
         playBtnGui.textContent = '▶ PLAY';
         updateVinylState();
@@ -775,7 +775,7 @@
       guiContainer.classList.add('is-playing');
     } else {
       playBtnGui.textContent = '▶ PLAY';
-      // Nếu đang ở trạng thái " Nhấn PLAY để nghe nhé " thì giữ nguyên status đó
+      // Nếu đang ở trạng thái "Đã tải - Nhấn PLAY" thì giữ nguyên status đó
       if (!guiContainer.classList.contains('is-playing')) {
         musicStatus.textContent = '🎵 Một chút nhạc';
       }
