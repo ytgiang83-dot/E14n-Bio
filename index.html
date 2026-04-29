@@ -13,401 +13,258 @@
       --text-main: #ffffff;
       --accent-color: #c084fc;
     }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      user-select: none;
-      -webkit-tap-highlight-color: transparent;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; user-select:none; -webkit-tap-highlight-color:transparent; }
+    /* Allow text selection in inputs */
+    input[type="text"] { user-select:auto; -webkit-user-select:auto; }
 
     body {
-      background-color: #020012;
-      color: var(--text-main);
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      height: 100%;
-      width: 100vw;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      perspective: 1000px;
-      cursor: none;
-      overflow: hidden;
+      background-color:#020012; color:var(--text-main);
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      height:100%; width:100vw; display:flex; justify-content:center; align-items:center;
+      perspective:1000px; cursor:none; overflow:hidden;
     }
 
-    .nebula {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(120px);
-      pointer-events: none;
-      z-index: -2;
-      opacity: 0.3;
-      animation: nebula-drift 20s ease-in-out infinite alternate;
-    }
-    .nebula-1 {
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.5) 0%, transparent 70%);
-      top: -200px; left: -100px;
-    }
-    .nebula-2 {
-      width: 500px; height: 500px;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, transparent 70%);
-      bottom: -150px; right: -100px;
-      animation-delay: -10s;
-    }
-    .nebula-3 {
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, transparent 70%);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      animation-delay: -5s;
-    }
-    @keyframes nebula-drift {
-      0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(40px, -30px) scale(1.2); }
-    }
+    /* ── NEBULA ── */
+    .nebula { position:fixed; border-radius:50%; filter:blur(120px); pointer-events:none; z-index:-2; opacity:0.3; animation:nebula-drift 20s ease-in-out infinite alternate; }
+    .nebula-1 { width:600px; height:600px; background:radial-gradient(circle,rgba(139,92,246,0.5) 0%,transparent 70%); top:-200px; left:-100px; }
+    .nebula-2 { width:500px; height:500px; background:radial-gradient(circle,rgba(59,130,246,0.5) 0%,transparent 70%); bottom:-150px; right:-100px; animation-delay:-10s; }
+    .nebula-3 { width:400px; height:400px; background:radial-gradient(circle,rgba(168,85,247,0.4) 0%,transparent 70%); top:50%; left:50%; transform:translate(-50%,-50%); animation-delay:-5s; }
+    @keyframes nebula-drift { 0%{transform:translate(0,0) scale(1);} 100%{transform:translate(40px,-30px) scale(1.2);} }
 
-    /* ── Chỉ giữ lại Space Canvas, đã xóa aura-canvas và burst-canvas ── */
-    #space-canvas {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; z-index: -1;
-    }
+    #space-canvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:-1; }
 
+    /* ── WELCOME MSG ── */
     #welcome-msg {
-      position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
-      background: rgba(20, 20, 40, 0.8); backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid var(--border-color); border-radius: 20px;
-      padding: 10px 25px; color: #e9d5ff; font-size: 14px; font-weight: 600;
-      letter-spacing: 1px; z-index: 10000; opacity: 0; pointer-events: none;
-      animation: welcomeFade 3s ease-in-out forwards;
+      position:fixed; top:20px; left:50%; transform:translateX(-50%);
+      background:rgba(20,20,40,0.8); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+      border:1px solid var(--border-color); border-radius:20px;
+      padding:10px 25px; color:#e9d5ff; font-size:14px; font-weight:600;
+      letter-spacing:1px; z-index:10000; opacity:0; pointer-events:none;
+      animation:welcomeFade 3s ease-in-out forwards;
     }
     @keyframes welcomeFade {
-      0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
-      15% { opacity: 1; transform: translateX(-50%) translateY(0); }
-      80% { opacity: 1; }
-      100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+      0%{opacity:0;transform:translateX(-50%) translateY(-10px);}
+      15%{opacity:1;transform:translateX(-50%) translateY(0);}
+      80%{opacity:1;} 100%{opacity:0;transform:translateX(-50%) translateY(-10px);}
     }
 
-    .cursor {
-      position: fixed; width: 20px; height: 20px;
-      border: 2px solid var(--accent-color); border-radius: 50%;
-      pointer-events: none; z-index: 9999;
-      transition: transform 0.15s ease; mix-blend-mode: difference;
-    }
-    .cursor-follower {
-      position: fixed; width: 8px; height: 8px;
-      background: var(--accent-color); border-radius: 50%;
-      pointer-events: none; z-index: 9998;
-      transition: transform 0.25s ease;
-      box-shadow: 0 0 15px var(--accent-color);
-    }
-    .cursor.expand { transform: scale(1.8); background: rgba(192, 132, 252, 0.1); }
+    /* ── CURSOR ── */
+    .cursor { position:fixed; width:20px; height:20px; border:2px solid var(--accent-color); border-radius:50%; pointer-events:none; z-index:9999; transition:transform 0.15s ease; mix-blend-mode:difference; }
+    .cursor-follower { position:fixed; width:8px; height:8px; background:var(--accent-color); border-radius:50%; pointer-events:none; z-index:9998; transition:transform 0.25s ease; box-shadow:0 0 15px var(--accent-color); }
+    .cursor.expand { transform:scale(1.8); background:rgba(192,132,252,0.1); }
+    .mouse-glow { position:fixed; width:400px; height:400px; background:radial-gradient(circle,rgba(168,85,247,0.15) 0%,transparent 70%); border-radius:50%; pointer-events:none; z-index:2; transform:translate(-50%,-50%); transition:opacity 0.3s ease; opacity:0; }
+    .mouse-glow.active { opacity:1; }
 
-    .mouse-glow {
-      position: fixed; width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%);
-      border-radius: 50%; pointer-events: none; z-index: 2;
-      transform: translate(-50%, -50%); transition: opacity 0.3s ease; opacity: 0;
-    }
-    .mouse-glow.active { opacity: 1; }
-
+    /* ── MAIN CARD ── */
     .container {
-      position: relative; z-index: 10; width: 90%; max-width: 450px;
-      padding: 40px 30px; background: var(--card-bg);
-      backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-      border: 1px solid var(--border-color); border-radius: 30px;
-      text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);
-      animation: fadeIn 1s ease-out;
-      transition: transform 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-      transform-style: preserve-3d;
+      position:relative; z-index:10; width:90%; max-width:450px;
+      padding:40px 30px; background:var(--card-bg);
+      backdrop-filter:blur(25px); -webkit-backdrop-filter:blur(25px);
+      border:1px solid var(--border-color); border-radius:30px;
+      text-align:center; box-shadow:0 25px 50px -12px rgba(0,0,0,0.7);
+      animation:fadeIn 1s ease-out;
+      transition:transform 0.2s cubic-bezier(0.17,0.67,0.83,0.67);
+      transform-style:preserve-3d;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
 
-    .profile-section { position: relative; transform-style: preserve-3d; margin-bottom: 20px; }
+    .profile-section { position:relative; transform-style:preserve-3d; margin-bottom:20px; }
     .profile-section img {
-      width: 100px; height: 100px; border-radius: 50%;
-      border: 3px solid var(--accent-color); margin-bottom: 15px;
-      box-shadow: 0 0 25px var(--accent-color); object-fit: cover;
-      transition: all 0.3s ease; transform: translateZ(50px);
-      animation: float 3s ease-in-out infinite;
+      width:100px; height:100px; border-radius:50%; border:3px solid var(--accent-color); margin-bottom:15px;
+      box-shadow:0 0 25px var(--accent-color); object-fit:cover; transition:all 0.3s ease;
+      transform:translateZ(50px); animation:float 3s ease-in-out infinite;
     }
-    .profile-section img:hover {
-      transform: translateZ(80px) scale(1.1) rotate(5deg);
-      box-shadow: 0 0 40px var(--accent-color), 0 0 80px rgba(168,85,247,0.3);
-    }
-    h1 {
-      font-size: 28px; font-weight: 800; letter-spacing: 1px; margin-bottom: 5px;
-      background: linear-gradient(to right, #e9d5ff, #a78bfa);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      transform: translateZ(30px); transition: all 0.3s ease;
-    }
-    h1:hover { letter-spacing: 3px; transform: translateZ(50px); }
-    .subtitle {
-      font-size: 13px; color: rgba(255,255,255,0.7); margin-bottom: 30px;
-      text-transform: uppercase; letter-spacing: 3px; transform: translateZ(20px);
-    }
+    .profile-section img:hover { transform:translateZ(80px) scale(1.1) rotate(5deg); box-shadow:0 0 40px var(--accent-color),0 0 80px rgba(168,85,247,0.3); }
+    h1 { font-size:28px; font-weight:800; letter-spacing:1px; margin-bottom:5px; background:linear-gradient(to right,#e9d5ff,#a78bfa); -webkit-background-clip:text; -webkit-text-fill-color:transparent; transform:translateZ(30px); transition:all 0.3s ease; }
+    h1:hover { letter-spacing:3px; transform:translateZ(50px); }
+    .subtitle { font-size:13px; color:rgba(255,255,255,0.7); margin-bottom:30px; text-transform:uppercase; letter-spacing:3px; transform:translateZ(20px); }
 
-    #subject-list {
-      display: flex; flex-direction: column; gap: 14px;
-      height: 310px; overflow-y: auto; padding-right: 8px; scroll-behavior: smooth;
-    }
-
+    #subject-list { display:flex; flex-direction:column; gap:14px; height:310px; overflow-y:auto; padding-right:8px; scroll-behavior:smooth; }
     .btn {
-      flex-shrink: 0; min-height: 70px; position: relative;
-      background: rgba(20, 20, 50, 0.5); border: 1px solid rgba(255,255,255,0.1);
-      color: white; border-radius: 16px; text-decoration: none;
-      font-size: 16px; font-weight: 600;
-      transition: all 0.3s cubic-bezier(0.4,0,0.2,1); overflow: hidden;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; transform-style: preserve-3d;
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      flex-shrink:0; min-height:70px; position:relative;
+      background:rgba(20,20,50,0.5); border:1px solid rgba(255,255,255,0.1);
+      color:white; border-radius:16px; text-decoration:none; font-size:16px; font-weight:600;
+      transition:all 0.3s cubic-bezier(0.4,0,0.2,1); overflow:hidden;
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer; transform-style:preserve-3d; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px);
     }
-    .btn:hover {
-      border-color: var(--accent-color);
-      box-shadow: inset 0 0 30px rgba(168,85,247,0.2), 0 0 30px rgba(168,85,247,0.25);
-    }
+    .btn:hover { border-color:var(--accent-color); box-shadow:inset 0 0 30px rgba(168,85,247,0.2),0 0 30px rgba(168,85,247,0.25); }
+    .bracket-tl,.bracket-br { position:absolute; width:14px; height:14px; pointer-events:none; opacity:0.8; }
+    .bracket-tl { top:7px; left:7px; border-left:1.5px solid var(--accent-color); border-top:1.5px solid var(--accent-color); }
+    .bracket-br { bottom:7px; right:7px; border-right:1.5px solid var(--accent-color); border-bottom:1.5px solid var(--accent-color); }
+    .led { position:absolute; top:10px; right:10px; width:4px; height:4px; border-radius:50%; background:var(--accent-color); box-shadow:0 0 8px var(--accent-color),0 0 12px var(--primary-glow); opacity:0.85; pointer-events:none; }
+    .serial { position:absolute; bottom:8px; left:16px; font-family:'Courier New',monospace; font-size:9px; color:var(--accent-color); opacity:0.6; letter-spacing:1px; pointer-events:none; }
+    .sheen { position:absolute; top:-120%; left:-120%; width:250%; height:250%; background:linear-gradient(130deg,transparent 40%,rgba(255,255,255,0.06) 50%,transparent 60%); transform:rotate(45deg); transition:all 0.45s ease; pointer-events:none; opacity:0; }
+    .btn:hover .sheen { opacity:1; top:0; left:0; }
+    .btn-text { position:relative; z-index:1; letter-spacing:1px; }
+    .btn.magnetic { transform:translate(var(--tx,0),var(--ty,0)) translateZ(30px) scale(1.03); }
+    .ripple { position:absolute; border-radius:50%; background:rgba(255,255,255,0.4); transform:scale(0); animation:ripple-animation 0.6s ease-out; pointer-events:none; }
+    @keyframes ripple-animation { to{transform:scale(4);opacity:0;} }
+    #subject-list::-webkit-scrollbar { width:4px; }
+    #subject-list::-webkit-scrollbar-track { background:rgba(255,255,255,0.03); border-radius:10px; }
+    #subject-list::-webkit-scrollbar-thumb { background:var(--accent-color); border-radius:10px; box-shadow:0 0 10px var(--accent-color); }
+    .copyright { margin-top:30px; font-size:10px; color:rgba(255,255,255,0.3); font-weight:500; letter-spacing:2px; text-transform:uppercase; }
+    @keyframes float { 0%,100%{transform:translateY(0px);} 50%{transform:translateY(-10px);} }
 
-    .bracket-tl, .bracket-br {
-      position: absolute; width: 14px; height: 14px; pointer-events: none; opacity: 0.8;
-    }
-    .bracket-tl { top: 7px; left: 7px; border-left: 1.5px solid var(--accent-color); border-top: 1.5px solid var(--accent-color); }
-    .bracket-br { bottom: 7px; right: 7px; border-right: 1.5px solid var(--accent-color); border-bottom: 1.5px solid var(--accent-color); }
-    .led {
-      position: absolute; top: 10px; right: 10px; width: 4px; height: 4px;
-      border-radius: 50%; background: var(--accent-color);
-      box-shadow: 0 0 8px var(--accent-color), 0 0 12px var(--primary-glow);
-      opacity: 0.85; pointer-events: none;
-    }
-    .serial {
-      position: absolute; bottom: 8px; left: 16px;
-      font-family: 'Courier New', monospace; font-size: 9px;
-      color: var(--accent-color); opacity: 0.6; letter-spacing: 1px; pointer-events: none;
-    }
-    .sheen {
-      position: absolute; top: -120%; left: -120%; width: 250%; height: 250%;
-      background: linear-gradient(130deg, transparent 40%, rgba(255,255,255,0.06) 50%, transparent 60%);
-      transform: rotate(45deg); transition: all 0.45s ease; pointer-events: none; opacity: 0;
-    }
-    .btn:hover .sheen { opacity: 1; top: 0; left: 0; }
-    .btn-text { position: relative; z-index: 1; letter-spacing: 1px; }
-    .btn.magnetic { transform: translate(var(--tx, 0), var(--ty, 0)) translateZ(30px) scale(1.03); }
+    /* ── MUSIC ENTRY BUTTON ── */
+    .music-entry { position:fixed; top:25px; left:25px; z-index:100; display:flex; flex-direction:column; align-items:flex-start; gap:8px; }
+    .music-entry-text { font-size:12px; font-weight:500; color:#e9d5ff; text-shadow:0 0 8px var(--accent-color); letter-spacing:0.5px; }
+    .music-entry-btn { width:50px; height:50px; border-radius:50%; background:rgba(20,20,50,0.5); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border:1px solid rgba(192,132,252,0.6); display:flex; align-items:center; justify-content:center; font-size:22px; color:#c084fc; cursor:pointer; box-shadow:0 0 15px #c084fc; transition:box-shadow 0.3s,transform 0.2s; }
+    .music-entry-btn:hover { box-shadow:0 0 30px #c084fc; transform:scale(1.1); }
 
-    .ripple {
-      position: absolute; border-radius: 50%; background: rgba(255,255,255,0.4);
-      transform: scale(0); animation: ripple-animation 0.6s ease-out; pointer-events: none;
-    }
-    @keyframes ripple-animation { to { transform: scale(4); opacity: 0; } }
-
-    #subject-list::-webkit-scrollbar { width: 4px; }
-    #subject-list::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); border-radius: 10px; }
-    #subject-list::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 10px; box-shadow: 0 0 10px var(--accent-color); }
-
-    .copyright {
-      margin-top: 30px; font-size: 10px; color: rgba(255,255,255,0.3);
-      font-weight: 500; letter-spacing: 2px; text-transform: uppercase;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
-    }
-
-    /* ========== LỐI VÀO MUSIC MODE ========== */
-    .music-entry {
-      position: fixed; top: 25px; left: 25px; z-index: 100;
-      display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
-    }
-    .music-entry-text {
-      font-size: 12px; font-weight: 500; color: #e9d5ff;
-      text-shadow: 0 0 8px var(--accent-color); letter-spacing: 0.5px;
-    }
-    .music-entry-btn {
-      width: 50px; height: 50px; border-radius: 50%;
-      background: rgba(20, 20, 50, 0.5);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(192,132,252,0.6);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; color: #c084fc; cursor: pointer;
-      box-shadow: 0 0 15px #c084fc; transition: box-shadow 0.3s, transform 0.2s;
-    }
-    .music-entry-btn:hover { box-shadow: 0 0 30px #c084fc; transform: scale(1.1); }
-
-    /* ========== MUSIC GUI FULLSCREEN ========== */
+    /* ══════════════════════════════════════════
+       MUSIC GUI – FULLSCREEN OVERLAY
+    ══════════════════════════════════════════ */
     #music-gui {
-      position: fixed; inset: 0; z-index: 9990;
-      background: rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      display: none; justify-content: center; align-items: center;
-      opacity: 0; transition: opacity 0.4s ease;
+      position:fixed; inset:0; z-index:9990;
+      background:rgba(0,0,0,0.2); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+      display:none; justify-content:center; align-items:center;
+      opacity:0; transition:opacity 0.4s ease;
     }
-    #music-gui.active { display: flex; opacity: 1; }
-    #music-gui.fade-out { opacity: 0; }
+    #music-gui.active { display:flex; opacity:1; }
+    #music-gui.fade-out { opacity:0; }
 
     .gui-container {
-      position: relative; z-index: 2; width: 90%; max-width: 400px;
-      display: flex; flex-direction: column; align-items: center;
-      gap: 20px; padding: 30px 20px;
-      background: rgba(20, 10, 40, 0.5);
-      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(192,132,252,0.4); border-radius: 40px;
-      box-shadow: 0 0 40px rgba(168,85,247,0.2);
-      transform: scale(0.9);
-      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      cursor: default;
+      position:relative; z-index:2; width:90%; max-width:400px;
+      display:flex; flex-direction:column; align-items:center;
+      gap:14px; padding:28px 20px 24px;
+      background:rgba(20,10,40,0.5); backdrop-filter:blur(15px); -webkit-backdrop-filter:blur(15px);
+      border:1px solid rgba(192,132,252,0.4); border-radius:40px;
+      box-shadow:0 0 40px rgba(168,85,247,0.2);
+      max-height:92vh; overflow-y:auto;
+      transform:scale(0.9);
+      transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+      cursor:default;
     }
-    #music-gui.active .gui-container { transform: scale(1); }
+    .gui-container::-webkit-scrollbar { width:3px; }
+    .gui-container::-webkit-scrollbar-track { background:transparent; }
+    .gui-container::-webkit-scrollbar-thumb { background:rgba(192,132,252,0.3); border-radius:10px; }
+    #music-gui.active .gui-container { transform:scale(1); }
 
-    .close-btn {
-      position: absolute; top: 15px; right: 20px;
-      background: none; border: none; color: var(--accent-color);
-      font-size: 28px; cursor: pointer; z-index: 10;
-      text-shadow: 0 0 15px var(--accent-color); transition: transform 0.2s;
-    }
-    .close-btn:hover { transform: scale(1.2); }
+    .close-btn { position:absolute; top:15px; right:20px; background:none; border:none; color:var(--accent-color); font-size:28px; cursor:pointer; z-index:10; text-shadow:0 0 15px var(--accent-color); transition:transform 0.2s; }
+    .close-btn:hover { transform:scale(1.2); }
 
-    .vinyl-wrapper { position: relative; width: 200px; height: 200px; }
-    .vinyl-image {
-      width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
-      box-shadow: 0 0 30px rgba(168,85,247,0.5); transition: box-shadow 0.3s;
-    }
-    .vinyl-image.spinning { animation: spin 2s linear infinite; }
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    .neon-ring {
-      position: absolute; top: -15px; left: -15px;
-      width: calc(100% + 30px); height: calc(100% + 30px);
-      border-radius: 50%;
-      border: 2px solid rgba(192,132,252,0.5);
-      box-shadow: 0 0 25px rgba(192,132,252,0.4), inset 0 0 15px rgba(192,132,252,0.2);
-      z-index: 0; pointer-events: none;
-      animation: neonPulse 1.8s ease-in-out infinite;
-    }
-    @keyframes neonPulse {
-      0%, 100% { box-shadow: 0 0 20px rgba(192,132,252,0.3); border-color: rgba(192,132,252,0.5); }
-      50% { box-shadow: 0 0 50px rgba(168,85,247,0.8); border-color: rgba(192,132,252,0.9); }
-    }
+    /* ── Vinyl ── */
+    .vinyl-wrapper { position:relative; width:180px; height:180px; flex-shrink:0; }
+    .vinyl-image { width:100%; height:100%; border-radius:50%; object-fit:cover; box-shadow:0 0 30px rgba(168,85,247,0.5); transition:box-shadow 0.3s; }
+    .vinyl-image.spinning { animation:spin 2s linear infinite; }
+    @keyframes spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+    .neon-ring { position:absolute; top:-14px; left:-14px; width:calc(100% + 28px); height:calc(100% + 28px); border-radius:50%; border:2px solid rgba(192,132,252,0.5); box-shadow:0 0 25px rgba(192,132,252,0.4),inset 0 0 15px rgba(192,132,252,0.2); z-index:0; pointer-events:none; animation:neonPulse 1.8s ease-in-out infinite; }
+    @keyframes neonPulse { 0%,100%{box-shadow:0 0 20px rgba(192,132,252,0.3);border-color:rgba(192,132,252,0.5);} 50%{box-shadow:0 0 50px rgba(168,85,247,0.8);border-color:rgba(192,132,252,0.9);} }
 
-    .music-status {
-      font-size: 18px; font-weight: 600; color: #e9d5ff;
-      text-shadow: 0 0 20px var(--accent-color); letter-spacing: 2px;
-    }
+    .music-status { font-size:15px; font-weight:600; color:#e9d5ff; text-shadow:0 0 20px var(--accent-color); letter-spacing:1.5px; text-align:center; max-width:100%; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 
-    /* ========== CONTROL PANEL ========== */
-    .control-panel {
-      width: 100%; display: flex; flex-direction: column;
-      gap: 12px; align-items: center; margin-top: 10px;
-    }
-    .sc-input {
-      width: 100%; background: rgba(20, 20, 50, 0.5);
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
-      padding: 10px 15px; color: white; font-size: 12px;
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      outline: none; text-align: center;
-    }
-    .sc-input::placeholder { color: rgba(255,255,255,0.3); }
+    /* ── Control Panel ── */
+    .control-panel { width:100%; display:flex; flex-direction:column; gap:10px; align-items:center; }
+    .sc-input { width:100%; background:rgba(20,20,50,0.5); border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:9px 15px; color:white; font-size:12px; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); outline:none; text-align:center; }
+    .sc-input::placeholder { color:rgba(255,255,255,0.3); }
+    .sc-input:focus { border-color:rgba(192,132,252,0.5); box-shadow:0 0 12px rgba(168,85,247,0.2); }
 
-    /* ── Wrapper 2 nút: relative + chiều cao cố định ── */
-    .control-buttons {
-      position: relative;
-      width: 100%;
-      height: 44px;
-    }
+    /* ── 2-button row ── */
+    .control-buttons { position:relative; width:100%; height:42px; }
 
-    /* ── Nút chung: absolute, định vị từ tâm 50% ── */
     .ctrl-btn {
-      position: absolute;
-      top: 0;
-      width: 110px;
-      background: rgba(20, 20, 50, 0.5);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: white; border-radius: 25px;
-      padding: 10px 0; font-size: 13px; font-weight: 600;
-      cursor: pointer;
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      text-align: center;
-      transition: border-color 0.3s, box-shadow 0.3s,
-                  transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+      position:absolute; top:0; width:110px;
+      background:rgba(20,20,50,0.5); border:1px solid rgba(255,255,255,0.1);
+      color:white; border-radius:25px; padding:9px 0; font-size:13px; font-weight:600;
+      cursor:pointer; backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); text-align:center;
+      transition:border-color 0.3s, box-shadow 0.3s,
+                  transform 0.6s cubic-bezier(0.4,0,0.2,1),
                   opacity 0.6s ease;
     }
-    .ctrl-btn:hover {
-      border-color: var(--accent-color);
-      box-shadow: 0 0 20px rgba(168,85,247,0.4);
-    }
+    .ctrl-btn:hover { border-color:var(--accent-color); box-shadow:0 0 20px rgba(168,85,247,0.4); }
 
-    /* ── Nút LOAD: mặc định ở giữa, khi playing trượt trái 65px ── */
-    #loadBtnGui {
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    .gui-container.is-playing #loadBtnGui {
-      transform: translateX(calc(-50% - 65px));
-    }
+    /* ADD button: centered by default → slides left when track selected */
+    #addBtnGui { left:50%; transform:translateX(-50%); }
+    .gui-container.has-selection #addBtnGui { transform:translateX(calc(-50% - 65px)); }
 
-    /* ── Nút PLAY/PAUSE: ẩn mặc định, khi playing trượt ra phải 65px ── */
-    #playBtnGui {
-      left: 50%;
-      transform: translateX(calc(-50% + 65px)) translateY(14px);
-      opacity: 0;
-      pointer-events: none;
-    }
-    .gui-container.is-playing #playBtnGui {
-      transform: translateX(calc(-50% + 65px)) translateY(0);
-      opacity: 1;
-      pointer-events: auto;
-    }
+    /* RIGHT button (START/PLAY/PAUSE): hidden → appears right */
+    #rightBtnGui { left:50%; transform:translateX(calc(-50% + 65px)) translateY(14px); opacity:0; pointer-events:none; }
+    .gui-container.has-selection #rightBtnGui { transform:translateX(calc(-50% + 65px)) translateY(0); opacity:1; pointer-events:auto; }
 
-    .progress-container { width: 100%; display: flex; flex-direction: column; gap: 4px; }
-    .progress-bar {
-      width: 100%; height: 4px; background: rgba(255,255,255,0.1);
-      border-radius: 2px; overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%; width: 0%;
-      background: linear-gradient(90deg, #a855f7, #c084fc);
-      box-shadow: 0 0 10px #a855f7; border-radius: 2px;
-      transition: width 0.1s linear;
-    }
-    .time-row {
-      display: flex; justify-content: space-between;
-      font-size: 10px; color: #c084fc;
-      text-shadow: 0 0 6px var(--accent-color);
-    }
-    .volume-row {
-      width: 100%; display: flex; align-items: center;
-      gap: 8px; margin-top: 5px;
-    }
-    .volume-label {
-      font-size: 10px; color: var(--accent-color);
-      text-shadow: 0 0 6px var(--accent-color); white-space: nowrap;
-    }
-    .volume-slider {
-      -webkit-appearance: none; appearance: none;
-      width: 100%; height: 4px; background: rgba(255,255,255,0.1);
-      border-radius: 2px; outline: none; cursor: pointer;
-    }
-    .volume-slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 14px; height: 14px; border-radius: 50%;
-      background: #c084fc; box-shadow: 0 0 10px #a855f7;
-    }
+    /* ── Progress bar ── */
+    .progress-container { width:100%; display:flex; flex-direction:column; gap:4px; }
+    .progress-bar { width:100%; height:4px; background:rgba(255,255,255,0.1); border-radius:2px; overflow:hidden; }
+    .progress-fill { height:100%; width:0%; background:linear-gradient(90deg,#a855f7,#c084fc); box-shadow:0 0 10px #a855f7; border-radius:2px; transition:width 0.1s linear; }
+    .time-row { display:flex; justify-content:space-between; font-size:10px; color:#c084fc; text-shadow:0 0 6px var(--accent-color); }
 
-    #sc-widget {
-      position: absolute; top: -9999px; left: -9999px;
-      width: 300px; height: 200px; pointer-events: none;
-    }
+    /* ── Volume ── */
+    .volume-row { width:100%; display:flex; align-items:center; gap:8px; }
+    .volume-label { font-size:10px; color:var(--accent-color); text-shadow:0 0 6px var(--accent-color); white-space:nowrap; }
+    .volume-slider { -webkit-appearance:none; appearance:none; width:100%; height:4px; background:rgba(255,255,255,0.1); border-radius:2px; outline:none; cursor:pointer; }
+    .volume-slider::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:#c084fc; box-shadow:0 0 10px #a855f7; }
 
-    @media (max-width: 768px) {
-      body { cursor: auto; }
-      .cursor, .cursor-follower { display: none; }
-      .music-entry { top: 15px; left: 15px; }
-      .music-entry-text { font-size: 10px; }
-      .music-entry-btn { width: 42px; height: 42px; font-size: 18px; }
+    /* ══════════════════════════════════
+       PLAYLIST SECTION
+    ══════════════════════════════════ */
+    .playlist-section { width:100%; display:flex; flex-direction:column; gap:8px; }
+
+    .playlist-header { display:flex; align-items:center; justify-content:space-between; padding:0 2px; }
+    .playlist-title { font-size:10px; letter-spacing:3px; color:var(--accent-color); text-shadow:0 0 8px var(--accent-color); font-weight:700; text-transform:uppercase; }
+
+    /* Loop / Shuffle toggle buttons */
+    .mode-btn {
+      background:rgba(20,20,50,0.5); border:1px solid rgba(255,255,255,0.1);
+      color:rgba(255,255,255,0.45); border-radius:18px; padding:4px 12px;
+      font-size:12px; cursor:pointer; backdrop-filter:blur(8px);
+      transition:all 0.3s ease; letter-spacing:0.5px; font-weight:600;
+    }
+    .mode-btn:hover { border-color:rgba(192,132,252,0.5); color:rgba(255,255,255,0.7); }
+    .mode-btn.active { border-color:var(--accent-color); color:var(--accent-color); box-shadow:0 0 12px rgba(168,85,247,0.4); background:rgba(168,85,247,0.1); }
+
+    /* Playlist item list */
+    .playlist-items { width:100%; max-height:158px; overflow-y:auto; display:flex; flex-direction:column; gap:5px; }
+    .playlist-items::-webkit-scrollbar { width:3px; }
+    .playlist-items::-webkit-scrollbar-track { background:rgba(255,255,255,0.02); border-radius:10px; }
+    .playlist-items::-webkit-scrollbar-thumb { background:rgba(192,132,252,0.4); border-radius:10px; }
+
+    .playlist-empty { text-align:center; font-size:11px; color:rgba(255,255,255,0.2); padding:18px 0; letter-spacing:1px; line-height:1.6; }
+
+    .playlist-item {
+      display:flex; align-items:center; gap:8px; padding:7px 10px;
+      background:rgba(20,20,50,0.4); border:1px solid rgba(255,255,255,0.06);
+      border-radius:10px; cursor:pointer; transition:all 0.2s ease;
+    }
+    .playlist-item:hover { border-color:rgba(192,132,252,0.35); background:rgba(40,20,70,0.45); }
+    .playlist-item.active { border-color:var(--accent-color); background:rgba(168,85,247,0.1); box-shadow:0 0 10px rgba(168,85,247,0.15); }
+
+    .track-num { font-family:'Courier New',monospace; font-size:9px; color:var(--accent-color); opacity:0.55; min-width:16px; flex-shrink:0; }
+    .track-name { flex:1; font-size:12px; font-weight:600; color:rgba(255,255,255,0.8); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; letter-spacing:0.3px; }
+    .playlist-item.active .track-name { color:#e9d5ff; }
+    .track-del-btn { background:none; border:none; color:rgba(255,255,255,0.2); font-size:10px; cursor:pointer; padding:3px 5px; border-radius:6px; transition:all 0.2s; flex-shrink:0; line-height:1; }
+    .track-del-btn:hover { color:#f87171; background:rgba(239,68,68,0.12); }
+
+    /* ══════════════════════════════════
+       DELETE CONFIRMATION MODAL
+       (absolute overlay inside gui-container)
+    ══════════════════════════════════ */
+    .del-modal {
+      position:absolute; inset:0;
+      background:rgba(4,1,16,0.93); backdrop-filter:blur(12px);
+      border-radius:40px; display:flex; align-items:center; justify-content:center;
+      z-index:50; opacity:0; pointer-events:none;
+      transition:opacity 0.25s ease;
+    }
+    .del-modal.show { opacity:1; pointer-events:all; }
+    .del-modal-box { display:flex; flex-direction:column; align-items:center; gap:24px; padding:20px 28px; text-align:center; }
+    .del-modal-msg { font-size:14px; font-weight:600; color:#e9d5ff; letter-spacing:0.5px; text-shadow:0 0 15px var(--accent-color); line-height:1.6; max-width:240px; }
+    .del-modal-btns { display:flex; gap:12px; }
+    .del-btn-action { padding:10px 26px; border-radius:22px; font-size:13px; font-weight:700; cursor:pointer; border:1px solid rgba(255,255,255,0.1); backdrop-filter:blur(8px); transition:all 0.3s ease; letter-spacing:1px; }
+    .del-confirm { background:rgba(239,68,68,0.18); border-color:rgba(239,68,68,0.45); color:#fca5a5; }
+    .del-confirm:hover { background:rgba(239,68,68,0.32); box-shadow:0 0 16px rgba(239,68,68,0.3); }
+    .del-cancel { background:rgba(20,20,50,0.5); color:rgba(255,255,255,0.65); }
+    .del-cancel:hover { border-color:var(--accent-color); color:#e9d5ff; }
+
+    /* ── SoundCloud hidden iframe ── */
+    #sc-widget { position:absolute; top:-9999px; left:-9999px; width:300px; height:200px; pointer-events:none; }
+
+    /* ── MOBILE ── */
+    @media (max-width:768px) {
+      body { cursor:auto; }
+      .cursor,.cursor-follower { display:none; }
+      .music-entry { top:15px; left:15px; }
+      .music-entry-text { font-size:10px; }
+      .music-entry-btn { width:42px; height:42px; font-size:18px; }
     }
   </style>
 </head>
@@ -416,7 +273,6 @@
 <div class="nebula nebula-2" id="nebula2"></div>
 <div class="nebula nebula-3" id="nebula3"></div>
 
-<!-- Chỉ giữ lại space-canvas, đã xóa aura-canvas và burst-canvas -->
 <canvas id="space-canvas"></canvas>
 
 <div class="mouse-glow" id="mouseGlow"></div>
@@ -428,19 +284,27 @@
   <button class="music-entry-btn" id="musicModeBtn">🎵</button>
 </div>
 
+<!-- ══ MUSIC GUI ══ -->
 <div id="music-gui">
   <div class="gui-container" id="guiContainer">
     <button class="close-btn" id="closeGuiBtn">✕</button>
+
+    <!-- Vinyl -->
     <div class="vinyl-wrapper">
       <img src="dianhac.png" alt="Đĩa nhạc" class="vinyl-image" id="vinylImage">
-      <div class="neon-ring" id="neonRing"></div>
+      <div class="neon-ring"></div>
     </div>
+
+    <!-- Status -->
     <div class="music-status" id="musicStatus">🎵 Một chút nhạc</div>
+
+    <!-- Controls -->
     <div class="control-panel">
-      <input type="text" id="scInputGui" class="sc-input" placeholder="Dán link SoundCloud...">
+      <input type="text" id="scInputGui"   class="sc-input" placeholder="Dán link SoundCloud...">
+      <input type="text" id="songNameInput" class="sc-input" placeholder="Tên bài hát (Bắt buộc)...">
       <div class="control-buttons">
-        <button class="ctrl-btn" id="loadBtnGui">LOAD</button>
-        <button class="ctrl-btn" id="playBtnGui">▶ PLAY</button>
+        <button class="ctrl-btn" id="addBtnGui">ADD</button>
+        <button class="ctrl-btn" id="rightBtnGui">▶ START</button>
       </div>
       <div class="progress-container">
         <div class="progress-bar"><div class="progress-fill" id="progressFillGui"></div></div>
@@ -451,11 +315,33 @@
         <input type="range" id="volumeSliderGui" class="volume-slider" min="0" max="100" value="70">
       </div>
     </div>
+
+    <!-- Playlist -->
+    <div class="playlist-section">
+      <div class="playlist-header">
+        <button id="loopBtn"    class="mode-btn" title="Vòng lặp vĩnh viễn">LOOP</button>
+        <span class="playlist-title" id="playlistTitle">PLAYLIST</span>
+        <button id="shuffleBtn" class="mode-btn" title="Mở ngẫu nhiên">SHUFFLE</button>
+      </div>
+      <div class="playlist-items" id="playlistItems"></div>
+    </div>
+
+    <!-- Delete confirmation modal (lives inside gui-container) -->
+    <div class="del-modal" id="deleteModal">
+      <div class="del-modal-box">
+        <p class="del-modal-msg" id="delModalMsg">Bạn có chắc chắn muốn xóa không?</p>
+        <div class="del-modal-btns">
+          <button class="del-btn-action del-confirm" id="delConfirmBtn">Xóa</button>
+          <button class="del-btn-action del-cancel"  id="delCancelBtn">Hủy</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
 <iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/123456789" allow="autoplay"></iframe>
 
+<!-- ══ MAIN CARD ══ -->
 <div class="container" id="main-card">
   <div class="profile-section">
     <img src="my-avatar.gif" alt="Avatar">
@@ -467,378 +353,597 @@
 </div>
 
 <script>
-  // ==================== FIX LỖI NHẢY VỊ TRÍ KHI F5 ====================
-  if (history.scrollRestoration) history.scrollRestoration = 'manual';
-  window.scrollTo(0, 0);
+/* ─────────────────────────────────────────────
+   INIT
+───────────────────────────────────────────── */
+if (history.scrollRestoration) history.scrollRestoration = 'manual';
+window.scrollTo(0, 0);
 
-  // ==================== DỮ LIỆU MÔN HỌC ====================
-  const SUBJECT_DATA = [
-    { name: "📜 ÔN TẬP LỊCH SỬ ( KHÔNG CHỌN )", link: "https://lichsu.e14n.workers.dev/" },
-    { name: "🇬🇧 ÔN TẬP TIẾNG ANH ( KHÔNG CHỌN )", link: "https://tienganh.e14n.workers.dev/" },
-    { name: "📍🗺️ ÔN TẬP ĐỊA LÝ ( CHỌN )", link: "https://dialy.e14n.workers.dev/" }
-  ];
+const SUBJECT_DATA = [
+  { name:"📜 ÔN TẬP LỊCH SỬ ( KHÔNG CHỌN )",  link:"https://lichsu.e14n.workers.dev/" },
+  { name:"🇬🇧 ÔN TẬP TIẾNG ANH ( KHÔNG CHỌN )", link:"https://tienganh.e14n.workers.dev/" },
+  { name:"📍🗺️ ÔN TẬP ĐỊA LÝ ( CHỌN )",       link:"https://dialy.e14n.workers.dev/" }
+];
 
-  const listContainer = document.getElementById('subject-list');
-  const card = document.getElementById('main-card');
-  const cursor = document.getElementById('cursor');
-  const cursorFollower = document.getElementById('cursorFollower');
-  const mouseGlow = document.getElementById('mouseGlow');
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const listContainer  = document.getElementById('subject-list');
+const card           = document.getElementById('main-card');
+const cursor         = document.getElementById('cursor');
+const cursorFollower = document.getElementById('cursorFollower');
+const mouseGlow      = document.getElementById('mouseGlow');
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-  SUBJECT_DATA.forEach((sub, i) => {
-    const a = document.createElement('a');
-    a.href = sub.link; a.className = 'btn'; a.target = '_blank'; a.rel = 'noopener noreferrer';
-    a.innerHTML = `<span class="bracket-tl"></span><span class="bracket-br"></span><span class="led"></span><span class="serial">[ SEC-${String(i+1).padStart(2, '0')} ]</span><span class="btn-text">${sub.name}</span><span class="sheen"></span>`;
-    listContainer.appendChild(a);
+SUBJECT_DATA.forEach((sub, i) => {
+  const a = document.createElement('a');
+  a.href = sub.link; a.className = 'btn'; a.target = '_blank'; a.rel = 'noopener noreferrer';
+  a.innerHTML = `<span class="bracket-tl"></span><span class="bracket-br"></span><span class="led"></span><span class="serial">[ SEC-${String(i+1).padStart(2,'0')} ]</span><span class="btn-text">${sub.name}</span><span class="sheen"></span>`;
+  listContainer.appendChild(a);
+});
+
+/* ─────────────────────────────────────────────
+   SPACE WARP  (giữ nguyên 100%)
+───────────────────────────────────────────── */
+const spaceCanvas = document.getElementById('space-canvas');
+const spaceCtx    = spaceCanvas.getContext('2d');
+let spaceW, spaceH, baseCenterX, baseCenterY, centerOffX = 0, centerOffY = 0;
+const stars = [];
+const STAR_COUNT = 180;
+function resizeSpace() {
+  spaceW = spaceCanvas.width  = window.innerWidth;
+  spaceH = spaceCanvas.height = window.innerHeight;
+  baseCenterX = spaceW / 2; baseCenterY = spaceH / 2;
+}
+window.addEventListener('resize', resizeSpace); resizeSpace();
+class WarpStar {
+  constructor() { this.reset(true); }
+  reset(init) {
+    const angle = Math.random() * Math.PI * 2;
+    this.dist    = init ? Math.random() * Math.max(spaceW, spaceH) * 0.8 : 10 + Math.random() * 30;
+    this.angle   = angle; this.z = Math.random() * 0.9 + 0.1;
+    this.speed   = 0.2 + this.z * 1.6; this.size = 0.3 + this.z * 2;
+    this.opacity = 0.25 + this.z * 0.7;
+    this.color   = ['#ffffff','#e9d5ff','#c4b5fd','#a5f0fc','#c084fc'][Math.floor(Math.random()*5)];
+  }
+  update() {
+    this.dist += this.speed;
+    if (this.dist > Math.max(spaceW, spaceH) * 0.95) { this.dist = 5 + Math.random() * 25; this.angle = Math.random() * Math.PI * 2; }
+  }
+  draw(ctx) {
+    const cx = baseCenterX + centerOffX, cy = baseCenterY + centerOffY;
+    const x = cx + Math.cos(this.angle) * this.dist, y = cy + Math.sin(this.angle) * this.dist;
+    if (x < -10 || x > spaceW+10 || y < -10 || y > spaceH+10) return;
+    ctx.save(); ctx.globalAlpha = this.opacity; ctx.fillStyle = this.color;
+    ctx.shadowBlur = this.size * 3; ctx.shadowColor = this.color;
+    ctx.beginPath(); ctx.arc(x, y, this.size, 0, Math.PI*2); ctx.fill();
+    const tl = this.speed * 2.5;
+    ctx.globalAlpha = this.opacity * 0.35; ctx.strokeStyle = this.color; ctx.lineWidth = this.size * 0.5;
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - Math.cos(this.angle)*tl, y - Math.sin(this.angle)*tl); ctx.stroke();
+    ctx.restore();
+  }
+}
+for (let i = 0; i < STAR_COUNT; i++) stars.push(new WarpStar());
+(function loop() { spaceCtx.clearRect(0,0,spaceW,spaceH); stars.forEach(s=>{s.update();s.draw(spaceCtx);}); requestAnimationFrame(loop); })();
+
+/* ─────────────────────────────────────────────
+   WELCOME MSG
+───────────────────────────────────────────── */
+if (!localStorage.getItem('e14n_visited')) { localStorage.setItem('e14n_visited','1'); showMsg(' Yooo, Xin Chào Nha ! 👋'); }
+else showMsg(' Về Rồi Đó Hả 😉 ');
+function showMsg(m) {
+  let d = document.createElement('div'); d.id = 'welcome-msg'; d.textContent = m;
+  document.body.appendChild(d); setTimeout(() => d.remove(), 3000);
+}
+
+/* ─────────────────────────────────────────────
+   GYRO  (giữ nguyên 100%)
+───────────────────────────────────────────── */
+const neb1 = document.getElementById('nebula1'), neb2 = document.getElementById('nebula2'), neb3 = document.getElementById('nebula3');
+function handleOrient(e) {
+  let x = e.gamma, y = e.beta; const lim = 12;
+  if (x>lim) x=lim; if (x<-lim) x=-lim; if (y>57) y=57; if (y<33) y=33;
+  card.style.transform = `rotateY(${x/1.2}deg) rotateX(${-(y-45)/1.2}deg)`;
+  neb1.style.transform = `translate(${x*0.03}px,${(y-45)*0.03}px)`;
+  neb2.style.transform = `translate(${x*0.06}px,${(y-45)*0.06}px)`;
+  neb3.style.transform = `translate(${x*0.09}px,${(y-45)*0.09}px)`;
+  centerOffX = x * 0.5; centerOffY = (y-45) * 0.5;
+}
+if (isMobile) { document.body.addEventListener('click', () => { if (typeof DeviceOrientationEvent?.requestPermission==='function') DeviceOrientationEvent.requestPermission().then(r=>{ if(r==='granted') window.addEventListener('deviceorientation',handleOrient);}); else window.addEventListener('deviceorientation',handleOrient); }, {once:true}); }
+
+/* ─────────────────────────────────────────────
+   PC: MOUSE GLOW + CURSOR + TILT + MAGNETIC
+───────────────────────────────────────────── */
+if (!isMobile) {
+  let cX=0,cY=0,fX=0,fY=0,mouseX=0,mouseY=0;
+  window.addEventListener('mousemove', e => {
+    mouseX=e.clientX; mouseY=e.clientY;
+    mouseGlow.style.left=mouseX+'px'; mouseGlow.style.top=mouseY+'px'; mouseGlow.classList.add('active');
+    card.style.transform = `rotateY(${(innerWidth/2-mouseX)/70}deg) rotateX(${(innerHeight/2-mouseY)/70}deg)`;
+    centerOffX=(mouseX-innerWidth/2)*0.03; centerOffY=(mouseY-innerHeight/2)*0.03;
   });
-
-  // ========== SPACE WARP (GIỮ NGUYÊN 100%) ==========
-  const spaceCanvas = document.getElementById('space-canvas');
-  const spaceCtx = spaceCanvas.getContext('2d');
-  let spaceW, spaceH, baseCenterX, baseCenterY, centerOffX = 0, centerOffY = 0;
-  const stars = [];
-  const STAR_COUNT = 180;
-  function resizeSpace() {
-    spaceW = spaceCanvas.width = window.innerWidth;
-    spaceH = spaceCanvas.height = window.innerHeight;
-    baseCenterX = spaceW / 2; baseCenterY = spaceH / 2;
-  }
-  window.addEventListener('resize', resizeSpace); resizeSpace();
-  class WarpStar {
-    constructor() { this.reset(true); }
-    reset(init) {
-      let angle = Math.random() * Math.PI * 2;
-      this.dist = init ? Math.random() * Math.max(spaceW, spaceH) * 0.8 : 10 + Math.random() * 30;
-      this.angle = angle; this.z = Math.random() * 0.9 + 0.1;
-      this.speed = 0.2 + this.z * 1.6; this.size = 0.3 + this.z * 2;
-      this.opacity = 0.25 + this.z * 0.7;
-      const colors = ['#ffffff','#e9d5ff','#c4b5fd','#a5f0fc','#c084fc'];
-      this.color = colors[Math.floor(Math.random() * colors.length)];
-    }
-    update() {
-      this.dist += this.speed;
-      if (this.dist > Math.max(spaceW, spaceH) * 0.95) { this.dist = 5 + Math.random() * 25; this.angle = Math.random() * Math.PI * 2; }
-    }
-    draw(ctx) {
-      let cx = baseCenterX + centerOffX, cy = baseCenterY + centerOffY;
-      let x = cx + Math.cos(this.angle) * this.dist, y = cy + Math.sin(this.angle) * this.dist;
-      if (x < -10 || x > spaceW+10 || y < -10 || y > spaceH+10) return;
-      ctx.save(); ctx.globalAlpha = this.opacity; ctx.fillStyle = this.color;
-      ctx.shadowBlur = this.size * 3; ctx.shadowColor = this.color;
-      ctx.beginPath(); ctx.arc(x, y, this.size, 0, Math.PI*2); ctx.fill();
-      let tailLen = this.speed * 2.5, tx = x - Math.cos(this.angle) * tailLen, ty = y - Math.sin(this.angle) * tailLen;
-      ctx.globalAlpha = this.opacity * 0.35; ctx.strokeStyle = this.color; ctx.lineWidth = this.size * 0.5;
-      ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(tx, ty); ctx.stroke(); ctx.restore();
-    }
-  }
-  for (let i=0; i<STAR_COUNT; i++) stars.push(new WarpStar());
-  (function loop() {
-    spaceCtx.clearRect(0,0,spaceW,spaceH);
-    stars.forEach(s => { s.update(); s.draw(spaceCtx); });
-    requestAnimationFrame(loop);
+  window.addEventListener('mouseleave', () => { card.style.transform=''; mouseGlow.classList.remove('active'); centerOffX=0; centerOffY=0; });
+  (function animCursor() {
+    cX+=(mouseX-cX)*0.15; cY+=(mouseY-cY)*0.15; fX+=(mouseX-fX)*0.075; fY+=(mouseY-fY)*0.075;
+    cursor.style.transform=`translate(${cX-10}px,${cY-10}px)`; cursorFollower.style.transform=`translate(${fX-4}px,${fY-4}px)`;
+    requestAnimationFrame(animCursor);
   })();
+  document.querySelectorAll('.btn,.profile-section img,h1,.music-entry-btn,.ctrl-btn,.close-btn,.mode-btn,.track-del-btn').forEach(el => {
+    el.addEventListener('mouseenter', ()=>cursor.classList.add('expand'));
+    el.addEventListener('mouseleave', ()=>cursor.classList.remove('expand'));
+  });
+  document.querySelectorAll('.btn').forEach(btn => {
+    btn.addEventListener('mousemove', e => {
+      const r=btn.getBoundingClientRect(), x=e.clientX-r.left-r.width/2, y=e.clientY-r.top-r.height/2, d=Math.sqrt(x*x+y*y);
+      if (d<100) { const s=(100-d)/100; btn.style.setProperty('--tx',`${x*s*0.3}px`); btn.style.setProperty('--ty',`${y*s*0.3}px`); btn.classList.add('magnetic'); }
+    });
+    btn.addEventListener('mouseleave', () => { btn.style.setProperty('--tx','0'); btn.style.setProperty('--ty','0'); btn.classList.remove('magnetic'); });
+  });
+  document.addEventListener('click', e => {
+    const r=document.createElement('div'); r.className='ripple';
+    r.style.left=e.clientX+'px'; r.style.top=e.clientY+'px'; r.style.width='10px'; r.style.height='10px';
+    document.body.appendChild(r); setTimeout(()=>r.remove(), 600);
+  });
+}
 
-  // ========== LOCAL STORAGE ==========
-  if (!localStorage.getItem('e14n_visited')) {
-    localStorage.setItem('e14n_visited', '1');
-    showMsg(' Yooo,hohoohoho Xin Chào Nha ! 👋 !');
-  } else showMsg(' Về Rồi Đó Hả 😉 ');
-  function showMsg(m) {
-    let d = document.createElement('div'); d.id = 'welcome-msg'; d.textContent = m;
-    document.body.appendChild(d); setTimeout(() => d.remove(), 3000);
+if (isMobile) {
+  document.querySelectorAll('.btn').forEach(b => {
+    b.addEventListener('touchstart', e => {
+      const r=document.createElement('div'); r.className='ripple';
+      const rect=b.getBoundingClientRect();
+      r.style.left=(e.touches[0].clientX-rect.left)+'px'; r.style.top=(e.touches[0].clientY-rect.top)+'px';
+      r.style.width='10px'; r.style.height='10px'; r.style.position='absolute';
+      b.appendChild(r); setTimeout(()=>r.remove(),600);
+      if (navigator.vibrate) navigator.vibrate(10);
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PLAYLIST SYSTEM
+═══════════════════════════════════════════════════════════ */
+const MAX_PLAYLIST = 10;
+const PLAYLIST_KEY = 'e14n_playlist_v3';
+
+let playlist          = [];
+let currentTrackIndex = -1;   // which track is "selected" in the UI
+let loadedTrackIndex  = -1;   // which track is actually in the SoundCloud widget
+let isPlaying         = false;
+let isLoaded          = false; // true once the widget has played the track at least once
+let loopMode          = false;
+let shuffleMode       = false;
+let allowErrorMessages = false;
+let autoplayFallbackTimer = null;
+let trackDurationMs   = 0;
+let deleteTargetIndex = -1;
+let deletePhase       = 0; // 0=hidden, 1=first confirm, 2=final confirm
+
+// DOM refs
+const gui           = document.getElementById('music-gui');
+const guiContainer  = document.getElementById('guiContainer');
+const vinylImage    = document.getElementById('vinylImage');
+const musicStatus   = document.getElementById('musicStatus');
+const rightBtnGui   = document.getElementById('rightBtnGui');
+const addBtnGui     = document.getElementById('addBtnGui');
+const progressFillGui = document.getElementById('progressFillGui');
+const currentTimeGui  = document.getElementById('currentTimeGui');
+const totalTimeGui    = document.getElementById('totalTimeGui');
+const volumeSliderGui = document.getElementById('volumeSliderGui');
+const scInputGui      = document.getElementById('scInputGui');
+const songNameInput   = document.getElementById('songNameInput');
+
+// ── Load/save playlist ──
+(function initPlaylist() {
+  try { const s = localStorage.getItem(PLAYLIST_KEY); if (s) playlist = JSON.parse(s); }
+  catch(e) { playlist = []; }
+  renderPlaylist();
+})();
+
+function savePlaylist() { localStorage.setItem(PLAYLIST_KEY, JSON.stringify(playlist)); }
+
+// ── Render playlist ──
+function renderPlaylist() {
+  const container  = document.getElementById('playlistItems');
+  const titleEl    = document.getElementById('playlistTitle');
+  titleEl.textContent = `PLAYLIST  ${playlist.length}/${MAX_PLAYLIST}`;
+
+  if (playlist.length === 0) {
+    container.innerHTML = '<div class="playlist-empty">Chưa có bài nào 🎶<br></div>';
+    return;
   }
 
-  // ========== GYRO (GIỮ NGUYÊN 100%) ==========
-  const neb1=document.getElementById('nebula1'), neb2=document.getElementById('nebula2'), neb3=document.getElementById('nebula3');
-  function handleOrient(e) {
-    let x=e.gamma,y=e.beta; const lim=12; if(x>lim)x=lim;if(x<-lim)x=-lim;if(y>57)y=57;if(y<33)y=33;
-    card.style.transform=`rotateY(${x/1.2}deg) rotateX(${-(y-45)/1.2}deg)`;
-    neb1.style.transform=`translate(${x*0.03}px,${(y-45)*0.03}px)`;
-    neb2.style.transform=`translate(${x*0.06}px,${(y-45)*0.06}px)`;
-    neb3.style.transform=`translate(${x*0.09}px,${(y-45)*0.09}px)`;
-    centerOffX=x*0.5; centerOffY=(y-45)*0.5;
-  }
-  if(isMobile){document.body.addEventListener('click',()=>{if(typeof DeviceOrientationEvent?.requestPermission==='function')DeviceOrientationEvent.requestPermission().then(r=>{if(r==='granted')window.addEventListener('deviceorientation',handleOrient);});else window.addEventListener('deviceorientation',handleOrient);},{once:true});}
+  container.innerHTML = '';
+  playlist.forEach((track, i) => {
+    const item    = document.createElement('div');
+    item.className = 'playlist-item' + (i === currentTrackIndex ? ' active' : '');
 
-  // ========== PC: MOUSE GLOW + CURSOR + 3D TILT (không có Sparkle) ==========
-  if(!isMobile){
-    let cX=0, cY=0, fX=0, fY=0, mouseX=0, mouseY=0;
-    window.addEventListener('mousemove', e => {
-      mouseX=e.clientX; mouseY=e.clientY;
-      mouseGlow.style.left=mouseX+'px'; mouseGlow.style.top=mouseY+'px';
-      mouseGlow.classList.add('active');
-      card.style.transform=`rotateY(${(innerWidth/2-mouseX)/70}deg) rotateX(${(innerHeight/2-mouseY)/70}deg)`;
-      centerOffX=(mouseX-innerWidth/2)*0.03; centerOffY=(mouseY-innerHeight/2)*0.03;
-    });
-    window.addEventListener('mouseleave',()=>{
-      card.style.transform=''; mouseGlow.classList.remove('active');
-      centerOffX=0; centerOffY=0;
-    });
-    (function animCursor(){
-      cX+=(mouseX-cX)*0.15; cY+=(mouseY-cY)*0.15;
-      fX+=(mouseX-fX)*0.075; fY+=(mouseY-fY)*0.075;
-      cursor.style.transform=`translate(${cX-10}px,${cY-10}px)`;
-      cursorFollower.style.transform=`translate(${fX-4}px,${fY-4}px)`;
-      requestAnimationFrame(animCursor);
-    })();
-    document.querySelectorAll('.btn,.profile-section img,h1,.music-entry-btn,.ctrl-btn,.close-btn').forEach(el=>{
-      el.addEventListener('mouseenter',()=>cursor.classList.add('expand'));
-      el.addEventListener('mouseleave',()=>cursor.classList.remove('expand'));
-    });
-    document.querySelectorAll('.btn').forEach(btn=>{
-      btn.addEventListener('mousemove',e=>{
-        let r=btn.getBoundingClientRect(),x=e.clientX-r.left-r.width/2,y=e.clientY-r.top-r.height/2,d=Math.sqrt(x*x+y*y);
-        if(d<100){let s=(100-d)/100;btn.style.setProperty('--tx',`${x*s*0.3}px`);btn.style.setProperty('--ty',`${y*s*0.3}px`);btn.classList.add('magnetic');}
-      });
-      btn.addEventListener('mouseleave',()=>{btn.style.setProperty('--tx','0');btn.style.setProperty('--ty','0');btn.classList.remove('magnetic');});
-    });
-    // Ripple click (giữ lại vì đây là CSS animation, không dùng canvas)
-    document.addEventListener('click',e=>{
-      let r=document.createElement('div'); r.className='ripple';
-      r.style.left=e.clientX+'px'; r.style.top=e.clientY+'px';
-      r.style.width='10px'; r.style.height='10px';
-      document.body.appendChild(r); setTimeout(()=>r.remove(),600);
-    });
-  }
+    const numSpan  = document.createElement('span');
+    numSpan.className = 'track-num';
+    numSpan.textContent = String(i+1).padStart(2,'0');
 
-  // Ripple touch cho mobile (CSS-based, không dùng canvas)
-  if(isMobile){
-    document.querySelectorAll('.btn').forEach(b=>{
-      b.addEventListener('touchstart',e=>{
-        let r=document.createElement('div'); r.className='ripple';
-        let rect=b.getBoundingClientRect();
-        r.style.left=(e.touches[0].clientX-rect.left)+'px';
-        r.style.top=(e.touches[0].clientY-rect.top)+'px';
-        r.style.width='10px'; r.style.height='10px'; r.style.position='absolute';
-        b.appendChild(r); setTimeout(()=>r.remove(),600);
-        if(navigator.vibrate) navigator.vibrate(10);
-      });
-    });
-  }
+    const nameSpan = document.createElement('span');
+    nameSpan.className = 'track-name';
+    nameSpan.textContent = track.name;
 
-  // ==================== SOUNDCLOUD ENGINE ====================
-  const gui          = document.getElementById('music-gui');
-  const guiContainer = document.getElementById('guiContainer');
-  const vinylImage   = document.getElementById('vinylImage');
-  const musicStatus  = document.getElementById('musicStatus');
-  const playBtnGui   = document.getElementById('playBtnGui');
-  const loadBtnGui   = document.getElementById('loadBtnGui');
-  const progressFillGui = document.getElementById('progressFillGui');
-  const currentTimeGui  = document.getElementById('currentTimeGui');
-  const totalTimeGui    = document.getElementById('totalTimeGui');
-  const volumeSliderGui = document.getElementById('volumeSliderGui');
-  const scInputGui      = document.getElementById('scInputGui');
+    const delBtn   = document.createElement('button');
+    delBtn.className   = 'track-del-btn';
+    delBtn.textContent = '✕';
+    delBtn.title       = 'Xóa bài này';
 
-  let scWidget = null;
-  let isPlaying = false;
-  let trackDurationMs = 0;
-  let allowErrorMessages = false;
+    item.appendChild(numSpan);
+    item.appendChild(nameSpan);
+    item.appendChild(delBtn);
 
-  // ── Timeout handle để thoát trạng thái "Loading" nếu autoplay bị chặn ──
-  let autoplayFallbackTimer = null;
+    // Select track on click (anywhere except del btn)
+    item.addEventListener('click', e => { if (!e.target.classList.contains('track-del-btn')) selectTrack(i); });
 
-  let currentVolume = localStorage.getItem('musicVolume');
-  currentVolume = currentVolume !== null ? parseFloat(currentVolume) : 0.7;
-  volumeSliderGui.value = Math.round(currentVolume * 100);
+    // Delete
+    delBtn.addEventListener('click', e => { e.stopPropagation(); showDeleteModal(i, 1); });
 
-  function formatTime(ms) {
-    const s = Math.floor(ms / 1000);
-    return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
-  }
+    container.appendChild(item);
+  });
+}
 
-  function updateVinylState() {
-    if (isPlaying) vinylImage.classList.add('spinning');
-    else vinylImage.classList.remove('spinning');
-  }
+// ── Select a track (shows START button, does NOT load yet) ──
+function selectTrack(index) {
+  if (index < 0 || index >= playlist.length) return;
 
-  /*
-   * FIX MOBILE AUTOPLAY:
-   * Nếu sau AUTOPLAY_TIMEOUT ms kể từ khi load() mà sự kiện PLAY chưa kích hoạt
-   * (isPlaying vẫn false), ta coi như autoplay bị chặn → hiện nút PLAY thủ công.
-   */
-  const AUTOPLAY_TIMEOUT = 2800; // ms – đủ để widget SoundCloud khởi tạo xong
+  // If currently playing a different track, stop it
+  if (isPlaying && loadedTrackIndex !== index && scWidget) scWidget.pause();
 
-  function startAutoplayFallback() {
-    clearAutoplayFallback();
-    autoplayFallbackTimer = setTimeout(() => {
-      if (!isPlaying) {
-        // Autoplay bị chặn: cập nhật giao diện để người dùng bấm PLAY thủ công
-        musicStatus.textContent = ' Nhấn PLAY để nghe nà ';
-        guiContainer.classList.add('is-playing'); // Hiện nút PLAY/PAUSE
-        playBtnGui.textContent = 'PLAY';
-        updateVinylState();
-      }
-    }, AUTOPLAY_TIMEOUT);
-  }
+  currentTrackIndex = index;
+  const alreadyLoaded = (loadedTrackIndex === index && isLoaded);
 
-  function clearAutoplayFallback() {
-    if (autoplayFallbackTimer) {
-      clearTimeout(autoplayFallbackTimer);
-      autoplayFallbackTimer = null;
-    }
-  }
+  guiContainer.classList.add('has-selection');
+  musicStatus.textContent = `♪  ${playlist[index].name}`;
 
-  function scErrorMsg(msg) {
-    if (allowErrorMessages) showMsg(msg);
-  }
-
-  function initSoundCloud() {
-    const iframe = document.getElementById('sc-widget');
-    scWidget = SC.Widget(iframe);
-
-    scWidget.bind(SC.Widget.Events.READY, () => {
-      scWidget.setVolume(currentVolume * 100);
-    });
-
-    scWidget.bind(SC.Widget.Events.PLAY, () => {
-      clearAutoplayFallback(); // Autoplay thành công → hủy fallback timer
-      isPlaying = true;
-      playBtnGui.textContent = 'PAUSE';
-      musicStatus.textContent = '🎵 Đang chill';
-      updateVinylState();
-      guiContainer.classList.add('is-playing');
-      scWidget.getDuration(durationMs => {
-        trackDurationMs = durationMs;
-        totalTimeGui.textContent = formatTime(durationMs);
-        currentTimeGui.textContent = '00:00';
-        progressFillGui.style.width = '0%';
-      });
-    });
-
-    scWidget.bind(SC.Widget.Events.PAUSE, () => {
-      isPlaying = false;
-      playBtnGui.textContent = 'PLAY';
-      updateVinylState();
-    });
-
-    scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, e => {
-      const currentMs = e.currentPosition;
-      if (trackDurationMs <= 0 && e.duration) {
-        trackDurationMs = e.duration;
-        totalTimeGui.textContent = formatTime(e.duration);
-      }
-      if (trackDurationMs > 0) {
-        progressFillGui.style.width = (currentMs / trackDurationMs * 100) + '%';
-        currentTimeGui.textContent = formatTime(currentMs);
-        totalTimeGui.textContent = formatTime(trackDurationMs);
-      }
-    });
-
-    scWidget.bind(SC.Widget.Events.FINISH, () => {
-      clearAutoplayFallback();
-      isPlaying = false;
-      playBtnGui.textContent = 'PLAY';
-      progressFillGui.style.width = '0%';
-      currentTimeGui.textContent = '00:00';
-      totalTimeGui.textContent = '00:00';
-      trackDurationMs = 0;
-      updateVinylState();
-      musicStatus.textContent = '🎵 Một chút nhạc';
-      guiContainer.classList.remove('is-playing');
-    });
-
-    scWidget.bind(SC.Widget.Events.ERROR, () => {
-      clearAutoplayFallback();
-      scErrorMsg('⚠️ Không thể phát bản nhạc này từ SoundCloud');
-      isPlaying = false;
-      playBtnGui.textContent = 'PLAY';
-      progressFillGui.style.width = '0%';
-      currentTimeGui.textContent = '00:00';
-      totalTimeGui.textContent = '00:00';
-      trackDurationMs = 0;
-      updateVinylState();
-      musicStatus.textContent = '🎵 Một chút nhạc';
-      guiContainer.classList.remove('is-playing');
-    });
-  }
-
-  function loadSoundCloudAPI() {
-    if (!document.querySelector('script[src="https://w.soundcloud.com/player/api.js"]')) {
-      const script = document.createElement('script');
-      script.src = 'https://w.soundcloud.com/player/api.js';
-      script.onload = initSoundCloud;
-      script.onerror = () => scErrorMsg('⚠️ Đang lỗi');
-      document.body.appendChild(script);
-    } else {
-      initSoundCloud();
-    }
-  }
-
-  // ── GUI mở / đóng ──
-  document.getElementById('musicModeBtn').addEventListener('click', () => {
-    gui.classList.add('active');
-    gui.classList.remove('fade-out');
+  if (alreadyLoaded && isPlaying) {
+    rightBtnGui.textContent = ' PAUSE';
+  } else if (alreadyLoaded && !isPlaying) {
+    rightBtnGui.textContent = ' PLAY';
+  } else {
+    rightBtnGui.textContent = ' START';
+    isPlaying = false;
     updateVinylState();
-    if (isPlaying) {
-      playBtnGui.textContent = 'PAUSE';
-      musicStatus.textContent = '🎵 Đang chill';
-      guiContainer.classList.add('is-playing');
-    } else {
-      playBtnGui.textContent = 'PLAY';
-      // Nếu đang ở trạng thái "Đã tải - Nhấn PLAY" thì giữ nguyên status đó
-      if (!guiContainer.classList.contains('is-playing')) {
-        musicStatus.textContent = '🎵 Một chút nhạc';
-      }
-    }
-  });
-
-  document.getElementById('closeGuiBtn').addEventListener('click', () => {
-    gui.classList.add('fade-out');
-    gui.classList.remove('active');
-    setTimeout(() => {
-      if (gui.classList.contains('fade-out') && !gui.classList.contains('active')) {
-        gui.style.display = 'none';
-      }
-    }, 400);
-  });
-
-  const observer = new MutationObserver(() => {
-    if (gui.classList.contains('active')) gui.style.display = 'flex';
-    else if (!gui.classList.contains('fade-out')) gui.style.display = 'none';
-  });
-  observer.observe(gui, { attributes: true, attributeFilter: ['class'] });
-
-  // ── Nút LOAD ──
-  loadBtnGui.addEventListener('click', () => {
-    allowErrorMessages = true;
-    let rawUrl = scInputGui.value.trim();
-    if (!rawUrl) return;
-    if (!rawUrl.includes('soundcloud.com')) {
-      showMsg('⚠️ Kiểm tra lại link đúng chưa đóa'); return;
-    }
-    const cleanUrl = rawUrl.split('?')[0];
-    if (scWidget) {
-      musicStatus.textContent = '⌛ Đang Mở, Chờ tí nà...';
-      trackDurationMs = 0;
+    // Reset progress only if switching to a new track
+    if (loadedTrackIndex !== index) {
       progressFillGui.style.width = '0%';
       currentTimeGui.textContent = '00:00';
-      totalTimeGui.textContent = '00:00';
-      isPlaying = false;
+      totalTimeGui.textContent   = '00:00';
+      trackDurationMs = 0;
+    }
+  }
+  renderPlaylist();
+}
+
+// ── Select AND immediately play (for Loop / Shuffle) ──
+function selectAndPlayTrack(index) {
+  if (index < 0 || index >= playlist.length) return;
+  currentTrackIndex = index;
+  isLoaded  = false;
+  isPlaying = false;
+  loadedTrackIndex = index;
+  renderPlaylist();
+  guiContainer.classList.add('has-selection');
+  musicStatus.textContent    = '⌛ Đang Mở...,chờ xí';
+  rightBtnGui.textContent    = ' START';
+  progressFillGui.style.width = '0%';
+  currentTimeGui.textContent  = '00:00';
+  totalTimeGui.textContent    = '00:00';
+  trackDurationMs = 0;
+  updateVinylState();
+  if (scWidget) { scWidget.load(playlist[index].url, { auto_play: true }); startAutoplayFallback(); }
+}
+
+// ── Helpers ──
+function formatTime(ms) {
+  const s = Math.floor(ms/1000);
+  return `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+}
+function updateVinylState() {
+  if (isPlaying) vinylImage.classList.add('spinning');
+  else           vinylImage.classList.remove('spinning');
+}
+
+/* ─────────────────────────────────────────────
+   AUTOPLAY FALLBACK (mobile browser blocks)
+───────────────────────────────────────────── */
+const AUTOPLAY_TIMEOUT = 2800;
+function startAutoplayFallback() {
+  clearAutoplayFallback();
+  autoplayFallbackTimer = setTimeout(() => {
+    if (!isPlaying) {
+      musicStatus.textContent = ' Nhấn START để nghe nhaa!';
+      guiContainer.classList.add('has-selection');
+      rightBtnGui.textContent = ' START';
+      isLoaded         = true;
+      loadedTrackIndex = currentTrackIndex;
       updateVinylState();
-      guiContainer.classList.remove('is-playing');
-      scWidget.load(cleanUrl, { auto_play: true });
-      // Khởi động bộ đếm: nếu autoplay bị chặn → hiện PLAY thủ công
-      startAutoplayFallback();
-    } else {
-      showMsg('⚠️ Đợi xí, Đang cài SoundCloud zô !!');
+    }
+  }, AUTOPLAY_TIMEOUT);
+}
+function clearAutoplayFallback() {
+  if (autoplayFallbackTimer) { clearTimeout(autoplayFallbackTimer); autoplayFallbackTimer = null; }
+}
+
+/* ─────────────────────────────────────────────
+   SOUNDCLOUD ENGINE
+───────────────────────────────────────────── */
+let scWidget = null;
+
+function initSoundCloud() {
+  const iframe = document.getElementById('sc-widget');
+  scWidget = SC.Widget(iframe);
+
+  scWidget.bind(SC.Widget.Events.READY, () => { scWidget.setVolume(currentVolume * 100); });
+
+  scWidget.bind(SC.Widget.Events.PLAY, () => {
+    clearAutoplayFallback();
+    isPlaying        = true;
+    isLoaded         = true;
+    loadedTrackIndex = currentTrackIndex;
+    rightBtnGui.textContent = ' PAUSE';
+    musicStatus.textContent = currentTrackIndex >= 0
+      ? `🎵  ${playlist[currentTrackIndex]?.name}`
+      : '🎵 Đang chill';
+    updateVinylState();
+    guiContainer.classList.add('has-selection');
+    scWidget.getDuration(dms => {
+      trackDurationMs = dms;
+      totalTimeGui.textContent   = formatTime(dms);
+      currentTimeGui.textContent = '00:00';
+      progressFillGui.style.width = '0%';
+    });
+  });
+
+  scWidget.bind(SC.Widget.Events.PAUSE, () => {
+    isPlaying = false;
+    rightBtnGui.textContent = ' PLAY';
+    updateVinylState();
+  });
+
+  scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, e => {
+    const ms = e.currentPosition;
+    if (trackDurationMs <= 0 && e.duration) { trackDurationMs = e.duration; totalTimeGui.textContent = formatTime(e.duration); }
+    if (trackDurationMs > 0) {
+      progressFillGui.style.width  = (ms / trackDurationMs * 100) + '%';
+      currentTimeGui.textContent   = formatTime(ms);
+      totalTimeGui.textContent     = formatTime(trackDurationMs);
     }
   });
 
-  // ── Nút PLAY/PAUSE ──
-  playBtnGui.addEventListener('click', () => {
-    if (!scWidget) { showMsg('⚠️ Thử LOAD một link trước xem'); return; }
-    if (isPlaying) scWidget.pause();
-    else scWidget.play();
+  scWidget.bind(SC.Widget.Events.FINISH, () => {
+    clearAutoplayFallback();
+    isPlaying = false;
+    updateVinylState();
+
+    if (loopMode && currentTrackIndex >= 0 && playlist.length > 0) {
+      // Loop: replay same track
+      selectAndPlayTrack(currentTrackIndex);
+    } else if (shuffleMode && playlist.length > 1) {
+      // Shuffle: random different track
+      let next, tries = 0;
+      do { next = Math.floor(Math.random() * playlist.length); tries++; }
+      while (next === currentTrackIndex && tries < 20);
+      selectAndPlayTrack(next);
+    } else {
+      // End: reset to ready state
+      rightBtnGui.textContent     = ' START';
+      progressFillGui.style.width = '0%';
+      currentTimeGui.textContent  = '00:00';
+      totalTimeGui.textContent    = '00:00';
+      trackDurationMs = 0;
+      musicStatus.textContent = currentTrackIndex >= 0 && playlist[currentTrackIndex]
+        ? `♪  ${playlist[currentTrackIndex].name}`
+        : '🎵 Một chút nhạc';
+    }
   });
 
-  // ── Volume ──
-  volumeSliderGui.addEventListener('input', () => {
-    currentVolume = parseFloat(volumeSliderGui.value) / 100;
-    localStorage.setItem('musicVolume', currentVolume);
-    if (scWidget) scWidget.setVolume(Math.round(currentVolume * 100));
+  scWidget.bind(SC.Widget.Events.ERROR, () => {
+    clearAutoplayFallback();
+    if (allowErrorMessages) showMsg('⚠️ Hình như nhạc die mất rùi !');
+    isPlaying = false;
+    isLoaded  = false;
+    rightBtnGui.textContent     = ' START';
+    progressFillGui.style.width = '0%';
+    currentTimeGui.textContent  = '00:00';
+    totalTimeGui.textContent    = '00:00';
+    trackDurationMs = 0;
+    updateVinylState();
+    musicStatus.textContent = currentTrackIndex >= 0 && playlist[currentTrackIndex]
+      ? `♪  ${playlist[currentTrackIndex].name}`
+      : '🎵 Một chút nhạc';
   });
+}
 
-  loadSoundCloudAPI();
+function loadSoundCloudAPI() {
+  if (!document.querySelector('script[src="https://w.soundcloud.com/player/api.js"]')) {
+    const s = document.createElement('script');
+    s.src = 'https://w.soundcloud.com/player/api.js';
+    s.onload  = initSoundCloud;
+    s.onerror = () => { if(allowErrorMessages) showMsg('⚠️ Đang lỗi mạng'); };
+    document.body.appendChild(s);
+  } else { initSoundCloud(); }
+}
+
+/* ── Volume init ── */
+let currentVolume = localStorage.getItem('musicVolume');
+currentVolume = currentVolume !== null ? parseFloat(currentVolume) : 0.7;
+volumeSliderGui.value = Math.round(currentVolume * 100);
+
+/* ─────────────────────────────────────────────
+   BUTTON LISTENERS
+───────────────────────────────────────────── */
+
+/* ADD button – add song to playlist */
+addBtnGui.addEventListener('click', () => {
+  allowErrorMessages = true;
+  const rawUrl  = scInputGui.value.trim();
+  const name    = songNameInput.value.trim();
+
+  if (!rawUrl && !name) return;
+  if (!rawUrl)                           { showMsg('⚠️ Dán link SoundCloud vào trước đi nha !'); return; }
+  if (!rawUrl.includes('soundcloud.com')){ showMsg('⚠️ Kiểm tra lại link đúng chưa đóa'); return; }
+  if (!name)                             { showMsg('⚠️ Phải nhập tên nhạc vào đã nha!'); return; }
+  if (playlist.length >= MAX_PLAYLIST)   { showMsg(`⚠️ Playlist đầy rồi á ! (tối đa ${MAX_PLAYLIST} bài)`); return; }
+
+  playlist.push({ name, url: rawUrl.split('?')[0] });
+  savePlaylist();
+  renderPlaylist();
+  scInputGui.value  = '';
+  songNameInput.value = '';
+  showMsg(` +1 nhạc ne "${name}" vào Playlist!`);
+});
+
+/* RIGHT button – START / PLAY / PAUSE */
+rightBtnGui.addEventListener('click', () => {
+  allowErrorMessages = true;
+  if (currentTrackIndex < 0)  { showMsg('⚠️ Chọn bài trong Playlist trước nha!'); return; }
+  if (!scWidget)               { showMsg('⚠️ SoundCloud chưa mở, đợi tí !'); return; }
+
+  if (isPlaying) {
+    scWidget.pause();
+  } else if (isLoaded && loadedTrackIndex === currentTrackIndex) {
+    // Track already loaded → just resume
+    scWidget.play();
+  } else {
+    // Need to (re)load
+    const track = playlist[currentTrackIndex];
+    musicStatus.textContent     = '⌛ Đang Mở... chờ xí';
+    trackDurationMs             = 0;
+    progressFillGui.style.width = '0%';
+    currentTimeGui.textContent  = '00:00';
+    totalTimeGui.textContent    = '00:00';
+    isLoaded  = false;
+    isPlaying = false;
+    loadedTrackIndex = currentTrackIndex;
+    updateVinylState();
+    scWidget.load(track.url, { auto_play: true });
+    startAutoplayFallback();
+  }
+});
+
+/* LOOP button */
+document.getElementById('loopBtn').addEventListener('click', () => {
+  loopMode = !loopMode;
+  document.getElementById('loopBtn').classList.toggle('active', loopMode);
+  showMsg(loopMode ? ' Loop: Bật' : ' Loop: Tắt');
+});
+
+/* SHUFFLE button */
+document.getElementById('shuffleBtn').addEventListener('click', () => {
+  shuffleMode = !shuffleMode;
+  document.getElementById('shuffleBtn').classList.toggle('active', shuffleMode);
+  showMsg(shuffleMode ? ' Shuffle: Bật' : ' Shuffle: Tắt');
+});
+
+/* VOLUME slider */
+volumeSliderGui.addEventListener('input', () => {
+  currentVolume = parseFloat(volumeSliderGui.value) / 100;
+  localStorage.setItem('musicVolume', currentVolume);
+  if (scWidget) scWidget.setVolume(Math.round(currentVolume * 100));
+});
+
+/* ─────────────────────────────────────────────
+   DELETE CONFIRMATION (2-step)
+───────────────────────────────────────────── */
+function showDeleteModal(index, phase) {
+  deleteTargetIndex = index;
+  deletePhase       = phase;
+  const modal      = document.getElementById('deleteModal');
+  const msg        = document.getElementById('delModalMsg');
+  const confirmBtn = document.getElementById('delConfirmBtn');
+
+  if (phase === 1) {
+    msg.textContent         = `Xóa "${playlist[index]?.name}" khỏi Playlist?`;
+    confirmBtn.textContent  = 'Xóa';
+  } else {
+    msg.textContent         = 'Xác nhận lần cuối để xóa?';
+    confirmBtn.textContent  = 'Xác nhận';
+  }
+  modal.classList.add('show');
+}
+
+document.getElementById('delConfirmBtn').addEventListener('click', () => {
+  if (deletePhase === 1) {
+    showDeleteModal(deleteTargetIndex, 2); // advance to phase 2
+  } else if (deletePhase === 2) {
+    executeDelete(deleteTargetIndex);
+    hideDeleteModal();
+  }
+});
+document.getElementById('delCancelBtn').addEventListener('click', hideDeleteModal);
+
+function hideDeleteModal() {
+  document.getElementById('deleteModal').classList.remove('show');
+  deletePhase = 0; deleteTargetIndex = -1;
+}
+
+function executeDelete(index) {
+  const deletingCurrent = (index === currentTrackIndex);
+  const deletingLoaded  = (index === loadedTrackIndex);
+
+  if (deletingCurrent) {
+    // Stop playback if this track is playing / loaded
+    if (scWidget && isPlaying) scWidget.pause();
+    isPlaying = false; isLoaded = false;
+    loadedTrackIndex  = -1; currentTrackIndex = -1;
+    updateVinylState();
+    musicStatus.textContent     = '🎵 Một chút nhạc';
+    guiContainer.classList.remove('has-selection');
+    progressFillGui.style.width = '0%';
+    currentTimeGui.textContent  = '00:00';
+    totalTimeGui.textContent    = '00:00';
+    trackDurationMs = 0;
+  } else {
+    if (index < currentTrackIndex) currentTrackIndex--;
+    if (deletingLoaded) { loadedTrackIndex = -1; isLoaded = false; }
+    else if (index < loadedTrackIndex) loadedTrackIndex--;
+  }
+
+  playlist.splice(index, 1);
+  savePlaylist();
+  renderPlaylist();
+  showMsg('🗑️ -1 nhạc !');
+}
+
+/* ─────────────────────────────────────────────
+   GUI OPEN / CLOSE
+───────────────────────────────────────────── */
+document.getElementById('musicModeBtn').addEventListener('click', () => {
+  gui.classList.add('active');
+  gui.classList.remove('fade-out');
+  updateVinylState();
+
+  if (currentTrackIndex >= 0) {
+    guiContainer.classList.add('has-selection');
+    if (isPlaying) {
+      rightBtnGui.textContent = ' PAUSE';
+      musicStatus.textContent = `🎵  ${playlist[currentTrackIndex]?.name}`;
+    } else {
+      rightBtnGui.textContent = isLoaded ? ' PLAY' : ' START';
+      musicStatus.textContent = `♪  ${playlist[currentTrackIndex]?.name}`;
+    }
+  } else {
+    guiContainer.classList.remove('has-selection');
+    musicStatus.textContent = '🎵 Một chút nhạc';
+  }
+});
+
+document.getElementById('closeGuiBtn').addEventListener('click', () => {
+  gui.classList.add('fade-out');
+  gui.classList.remove('active');
+  setTimeout(() => {
+    if (gui.classList.contains('fade-out') && !gui.classList.contains('active')) gui.style.display = 'none';
+  }, 400);
+});
+
+// MutationObserver to sync display:none/flex
+const observer = new MutationObserver(() => {
+  if (gui.classList.contains('active')) gui.style.display = 'flex';
+  else if (!gui.classList.contains('fade-out')) gui.style.display = 'none';
+});
+observer.observe(gui, { attributes:true, attributeFilter:['class'] });
+
+/* Boot SoundCloud */
+loadSoundCloudAPI();
 </script>
 </body>
 </html>
